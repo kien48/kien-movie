@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('user_movie_likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Movie::class)->constrained();
-            $table->text('content');
             $table->foreignIdFor(\App\Models\User::class)->constrained();
-            $table->integer('sao')->default(5);
+            $table->foreignIdFor(\App\Models\Movie::class)->constrained();
             $table->timestamps();
-
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('user_movie_likes');
     }
 };

@@ -10,7 +10,10 @@
                      style="border-radius: 10px;width: 290px;height: 450px">
                 @if($model['gia'] >= 1)
                     <span class="badge bg-danger rounded-pill position-absolute top-0 end-0">
-                                     <i class="fa-solid fa-crown"></i> @if($trangThaiMuaPhim == true) Đã mua @else Có phí @endif
+                                     <i class="fa-solid fa-crown"></i>
+                        <span ng-show="statusMuaPhim == true">Đã mua</span>
+                        <span ng-show="statusMuaPhim == false">Có phí</span>
+
                                     </span>
                 @elseif($model['is_vip'] == true)
                     <span class="badge bg-warning rounded-pill position-absolute top-0 end-0">
@@ -25,64 +28,52 @@
                     ● {{$model['ngon_ngu']}} </h5>
                 <h5 class="font-monospace text-light-emphasis mt-3">Số tập: {{$model['so_tap']}} | Hiện
                     tại: {{$model['trang_thai']}} </h5>
-                <h5 class="font-monospace text-light-emphasis mt-3">Thể loại:
-                    @if(count($model['catelogue']) >=1)
-                        @foreach($model['catelogue'] as $data)
-                           | {{$data['ten']}} |
-                        @endforeach
-                    @else
-                        Đang cập nhật
-                    @endif
-                </h5>
-                <h5 class="h4 mt-3" data-bs-toggle="tooltip"
-                    title="{{$model['mo_ta']}}!">{{substr($model['mo_ta'],0,500)}}... </h4>
-                    <div class="d-flex mt-3">
-                        <h5 class="font-monospace text-light-emphasis">Diễn viên:</h5>
-                        <h5> {{$model['dien_vien']}} </h5>
-                    </div>
-                    <div class="d-flex mt-3">
-                        <h5 class="font-monospace text-light-emphasis">Đạo diễn:</h5>
-                        <h5> {{$model['dao_dien']}} </h5>
-                    </div>
-                   @if($model['is_vip'] == 0)
-                        <div class="d-flex mt-3">
-                            <h5 class="font-monospace text-light-emphasis">Giá phim:</h5>
-                            <h5> {{number_format($model['gia'])}} xu </h5>
-                        </div>
-                    @endif
-                    <div class="d-flex ">
-                        @if($is_vip == 0 && $model['is_vip'] == true)
-                            <div class="mt-3">
-                                <button class="btn btn-outline-warning" style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center;" disabled>
-                                    <h4 style="margin: 0; display: flex; align-items: center;color: white;">
-                                        Chỉ dành cho tài khoản VIP
-                                    </h4>
-                                </button>
-                            </div>
+                <h5 class="font-monospace text-light-emphasis mt-3">Năm phát hành: {{$model['nam_phat_hanh']}}
+                    <h5 class="font-monospace text-light-emphasis mt-3">Thể loại:
+                        @if(count($model['catelogue']) >=1)
+                            @foreach($model['catelogue'] as $data)
+                                | {{$data['ten']}} |
+                            @endforeach
                         @else
-                            @if(isset($model['episode'][0]))
-                                @if($model['gia'] == 0)
-                                    <div class="mt-3">
-                                        <a href="{{ route('watch', ['slug' => $model['slug'], 'tap' => $model['episode'][0]['tap']]) }}"
-                                           class="btn btn-light"
-                                           style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                                            <h2 style="margin: 0; display: flex; align-items: center;color: black;">
-                                                <i class="fa-solid fa-play" style="margin-right: 10px;"></i>
-                                            </h2>
-                                        </a>
-                                    </div>
-                                @else
-                                    @if($trangThaiMuaPhim == false)
-                                        <div class="mt-3">
-                                            <button data-bs-toggle="modal" data-bs-target="#myModalMuaPhim"
-                                                    class="btn btn-outline-warning"
-                                                    style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                                                <h2 style="margin: 0; display: flex; align-items: center;color: white;">
-                                                    <i class="fa-solid fa-bag-shopping" style="margin-right: 10px;"></i>
-                                                </h2>
-                                            </button>
-                                        </div>
-                                    @else
+                            Đang cập nhật
+                        @endif
+                    </h5>
+                    <h5 class="h4 mt-3" data-bs-toggle="tooltip"
+                        title="{{$model['mo_ta']}}!">{{substr($model['mo_ta'],0,200)}}... </h5>
+                        <div class="d-flex mt-3">
+                            <h5 class="font-monospace text-light-emphasis">Diễn viên:</h5>
+                            <h5> {{$model['dien_vien']}} </h5>
+                        </div>
+                        <div class="d-flex mt-3">
+                            <h5 class="font-monospace text-light-emphasis">Đạo diễn:</h5>
+                            <h5> {{$model['dao_dien']}} </h5>
+                        </div>
+                        <div class="d-flex">
+                            @if($model['is_vip'] == 0)
+                                <div class="d-flex mt-3">
+                                    <h5 class="font-monospace text-light-emphasis">Giá phim:</h5>
+                                    <h5> {{number_format($model['gia'])}} xu </h5>
+                                </div>
+                            @endif
+                            <div class="d-flex mt-3 ms-3">
+                                <h5 class="font-monospace text-light-emphasis">Lượt thích:</h5>
+                                <h5> @{{ countLike }} </h5>
+                            </div>
+                        </div>
+                        <div class="d-flex mt-2">
+                            @if($is_vip == 0 && $model['is_vip'] == true)
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-warning"
+                                            style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center;"
+                                            disabled>
+                                        <h4 style="margin: 0; display: flex; align-items: center;color: white;">
+                                            Chỉ dành cho tài khoản VIP
+                                        </h4>
+                                    </button>
+                                </div>
+                            @else
+                                @if(isset($model['episode'][0]))
+                                    @if($model['gia'] == 0)
                                         <div class="mt-3">
                                             <a href="{{ route('watch', ['slug' => $model['slug'], 'tap' => $model['episode'][0]['tap']]) }}"
                                                class="btn btn-light"
@@ -92,41 +83,85 @@
                                                 </h2>
                                             </a>
                                         </div>
+                                    @else
+                                        <div class="mt-3" ng-show="statusMuaPhim == false">
+                                            <button data-bs-toggle="modal" data-bs-target="#myModalMuaPhim"
+                                                    class="btn btn-outline-warning"
+                                                    style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                                                <h2 style="margin: 0; display: flex; align-items: center;color: white;">
+                                                    <i class="fa-solid fa-bag-shopping"
+                                                       style="margin-right: 10px;"></i>
+                                                </h2>
+                                            </button>
+                                        </div>
+                                        <div class="mt-3" ng-show="statusMuaPhim == true">
+                                            <a href="{{ route('watch', ['slug' => $model['slug'], 'tap' => $model['episode'][0]['tap']]) }}"
+                                               class="btn btn-light"
+                                               style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                                                <h2 style="margin: 0; display: flex; align-items: center;color: black;">
+                                                    <i class="fa-solid fa-play" style="margin-right: 10px;"></i>
+                                                </h2>
+                                            </a>
+                                        </div>
                                     @endif
+                                @else
+                                    <div class="mt-3">
+                                        <a href="#" class="btn btn-warning"
+                                           style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                                            <h2 style="margin: 0; display: flex; align-items: center;color: white;">
+                                                <i class="fa-solid fa-screwdriver-wrench"></i>
+                                            </h2>
+                                        </a>
+                                    </div>
                                 @endif
-                            @else
-                                <div class="mt-3">
-                                    <a href="#" class="btn btn-warning"
-                                       style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                            @endif
+
+                            <div class="mt-3 ms-3" ng-show="ketqua === false">
+                                <form action="" method="post">
+                                    <button ng-click="add()" type="button" class="btn btn-outline-danger"
+                                            style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                                         <h2 style="margin: 0; display: flex; align-items: center;color: white;">
-                                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                                            <i class="fa-solid fa-heart"></i>
                                         </h2>
-                                    </a>
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="mt-3 ms-3" ng-show="ketqua === true">
+                                <form action="" method="post">
+                                    <button ng-click="remove()" type="button" class="btn btn-danger"
+                                            style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                                        <h2 style="margin: 0; display: flex; align-items: center;color: white;">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </h2>
+                                    </button>
+                                </form>
+                            </div>
+
+                            @if(Auth::check())
+                                <div class="mt-3 ms-3">
+                                    <form action="" method="post">
+                                        <button ng-show="like == true" ng-click="unLike()" type="button"
+                                                class="btn btn-info"
+                                                style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                                            <h2 style="margin: 0; display: flex; align-items: center;color: white;">
+                                                <i class="fa-solid fa-thumbs-up"></i>
+                                            </h2>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="mt-3 ">
+                                    <form action="" method="post">
+                                        <button ng-show="like == false" ng-click="likes()" type="button"
+                                                class="btn btn-outline-info"
+                                                style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                                            <h2 style="margin: 0; display: flex; align-items: center;color: white;">
+                                                <i class="fa-regular fa-thumbs-up"></i>
+                                            </h2>
+                                        </button>
+                                    </form>
                                 </div>
                             @endif
-                        @endif
-
-                        <div class="mt-3 ms-3" ng-show="ketqua === false">
-                            <form action="" method="post">
-                                <button ng-click="add()" type="button" class="btn btn-outline-danger"
-                                        style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                                    <h2 style="margin: 0; display: flex; align-items: center;color: white;">
-                                        <i class="fa-solid fa-heart"></i>
-                                    </h2>
-                                </button>
-                            </form>
                         </div>
-                        <div class="mt-3 ms-3" ng-show="ketqua === true">
-                            <form action="" method="post">
-                                <button ng-click="remove()" type="button" class="btn btn-danger"
-                                        style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                                    <h2 style="margin: 0; display: flex; align-items: center;color: white;">
-                                        <i class="fa-solid fa-heart"></i>
-                                    </h2>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
             </div>
         </div>
         <div class="row mb-5 mt-5">
@@ -139,7 +174,7 @@
                         <div class="col-6 col-sm-4 col-md-3 col-lg-2 movie-card mb-3 mt-3">
                             <a href="{{ route('detail', $item['slug']) }}" class="nav-link position-relative"
                                data-bs-toggle="tooltip" title="{{ $item['ten'] }}">
-                                <img src="{{$item['anh']}}" alt="" class="img-fluid">
+                                <img src="{{$item['anh']}}" alt="" class="img-fluid" width="200px">
                                 @if($item['gia'] >= 1)
                                     <span class="badge bg-danger rounded-pill position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
@@ -158,50 +193,42 @@
     </div>
     {{--Modal mua phim--}}
     <!-- The Modal -->
-    <div class="modal" id="myModalMuaPhim">
-        <div class="modal-dialog">
-            <div class="modal-content bg-warning">
-
-                <!-- Modal Header -->
-                <div class="modal-header ">
-                    <h3 class="modal-title">Mua phim</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="modal text-danger fade" id="myModalMuaPhim" tabindex="-1" aria-labelledby="myModalMuaPhimLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h3 class="modal-title text-white" id="myModalMuaPhimLabel">Mua phim</h3>
+                    <button type="button" id="close" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                 </div>
-
-                <!-- Modal body -->
                 <div class="modal-body">
                     @if(isset($dataUser['coin'][0]['coin']) && $dataUser['coin'][0]['coin'] >= $model['gia'])
-                        <form action="{{route('muaPhim')}}" method="post">
+                        <form action="" method="post">
                             @csrf
-                            <h5>Số xu còn lại
-                                : {{isset($dataUser['coin'][0]['coin']) ? (number_format($dataUser['coin'][0]['coin'])) : 0}}
+                            <h5 class="mb-3">Số xu còn
+                                lại: {{ isset($dataUser['coin'][0]['coin']) ? number_format($dataUser['coin'][0]['coin']) : 0 }}
                                 xu</h5>
-                            <h5>Giá phim : {{number_format($model['gia'])}} xu</h5>
+                            <h5 class="mb-3">Giá phim: {{ number_format($model['gia']) }} xu</h5>
                             <hr>
-                            <h5>Tổng xu còn lại
-                                : {{(isset($dataUser['coin'][0]['coin'])) ? (number_format($dataUser['coin'][0]['coin']  - $model['gia']) ) : 0}}
+                            <h5 class="mb-3">Tổng xu còn
+                                lại: {{ isset($dataUser['coin'][0]['coin']) ? number_format($dataUser['coin'][0]['coin'] - $model['gia']) : 0 }}
                                 xu</h5>
-                            <input name="movie_id" type="hidden" value="{{$model['id']}}">
-                            <input name="coin" type="hidden" value="{{$model['gia']}}">
                 </div>
-
-                <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                    <button type="button" ng-click="muaPhim()" class="btn btn-primary">Xác nhận mua phim</button>
                     </form>
                     @else
-                        <h3>Không đủ tiền đòi mua ?</h3>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
+                        <h3>Không đủ tiền để mua phim này</h3>
                     @endif
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
     </div>
+
 
     @section('js')
         <script>
@@ -235,12 +262,75 @@
                 $scope.kiemTra = () => {
                     $http.get('http://movie.test/api/favourite/{{$model['slug']}}')
                         .then(res => {
-                                $scope.ketqua = res.data.status;
+                            $scope.ketqua = res.data.status;
                         }).catch(error => {
                         console.error(error);
                     });
                 };
                 $scope.kiemTra();
+
+                $scope.likes = () => {
+                    $http.post('{{route('likeMovie')}}', {
+                        movie_id: '{{$model['id']}}'
+                    }).then(function (res) {
+                        $scope.checkLike();
+                        $scope.countLikeMovie();
+                    }).catch(error => {
+                        console.error(error);
+                    })
+                }
+
+                $scope.unLike = () => {
+                    $http.post('{{route('unLikeMovie')}}', {
+                        movie_id: '{{ $model["id"] }}',
+                    }).then(function (res) {
+                        $scope.checkLike();
+                        $scope.countLikeMovie();
+                    }).catch(error => {
+                        console.error(error);
+                    })
+                }
+                $scope.like = false;
+                $scope.checkLike = () => {
+                    $http.get('http://movie.test/api/like/{{$model['id']}}')
+                        .then(function (res) {
+                            $scope.like = res.data.status
+                        })
+                }
+                $scope.checkLike();
+
+                $scope.countLike = 0;
+                $scope.countLikeMovie = () => {
+                    $http.get('http://movie.test/api/count-like/{{$model['id']}}')
+                        .then(function (res) {
+                            $scope.countLike = res.data.data
+                        }).catch(error => {
+                        console.error(error);
+                    })
+                }
+                $scope.countLikeMovie();
+
+
+                $scope.muaPhim = () => {
+                    $http.post('{{ route('muaPhim') }}', {
+                        movie_id: {{$model['id']}},
+                        coin: {{$model['gia']}}
+                    }).then(function (res) {
+                        $scope.ttMuaPhim();
+                        document.querySelector('.btn-close').click()
+                        alert('Mua phim thành công');
+                    })
+                }
+                $scope.statusMuaPhim = false;
+                $scope.ttMuaPhim = () => {
+                    $http.get('http://movie.test/api/mua-phim-status/{{$model['slug']}}')
+                        .then(function (res) {
+                            $scope.statusMuaPhim = res.data.status
+                        }).catch(function (error) {
+                        console.log(error)
+                    })
+                }
+                $scope.ttMuaPhim();
             };
         </script>
     @endsection

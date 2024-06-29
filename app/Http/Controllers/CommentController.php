@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -14,8 +15,8 @@ class CommentController extends Controller
 
     public function index(string $id)
     {
-        //
-        $data = Comment::where('movie_id', $id)->latest()->get();
+
+        $data = Comment::query()->with('user')->where('movie_id', $id)->latest('id')->get();
         $json = [
             'status' => true,
             'msg'=>'thanh cong!',
@@ -38,20 +39,9 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $comment = new Comment();
-        $comment->content = $request->content;
-        $comment->name = $request->name;
-        $comment->movie_id = $request->movie_id;
-        $comment->save();
-        $data = Comment::where('movie_id', $comment->movie_id)->latest()->get();
-        $json = [
-            'status' => true,
-            'msg'=>'thanh cong!',
-            'data' => $data
-        ];
-
-        return response()->json($json,200);
+        $Comment = $request->all();
+        $Comment['user_id'] = Auth::user()->id;
+        Comment::query()->create($Comment);
     }
 
     /**

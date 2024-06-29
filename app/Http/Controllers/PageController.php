@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Catelogue;
-use App\Models\CateloguePost;
 use App\Models\Lists;
 use App\Models\Movie;
 use App\Models\User;
+use App\Models\UserMovieLike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,22 +17,22 @@ class PageController extends Controller
     public function index()
     {
         $dataPhimMoiThem = Movie::query()
-        ->latest('id')
+            ->latest('id')
             ->take(12)
             ->get();
         $dataPhimLe = Movie::query()
-        ->where('list_id', 1)
-        ->latest('id')
+            ->where('list_id', 1)
+            ->latest('id')
             ->take(12)
             ->get();
         $dataPhimBo = Movie::query()
-        ->where('list_id', 2)
-        ->latest('id')
+            ->where('list_id', 2)
+            ->latest('id')
             ->take(12)
             ->get();
         $dataTvShows = Movie::query()
-        ->where('list_id', 3)
-        ->latest('id')
+            ->where('list_id', 3)
+            ->latest('id')
             ->take(12)
             ->get();
 
@@ -49,7 +48,7 @@ class PageController extends Controller
             ->firstOrFail()
             ->toArray();
         $is_vip = 0;
-        if(Auth::check()){
+        if (Auth::check()) {
             $is_vip = Auth::user()->is_vip;
         }
         $list_id = $model['list_id'];
@@ -59,22 +58,17 @@ class PageController extends Controller
             ->where('slug', '!=', $slug)
             ->get()
             ->toArray();
-
-        $trangThaiMuaPhim = false;
-
         $dataUser = [];
-        if(Auth::check()){
-            $dataUser =  User::query()->with(['movies','coin'])->find(Auth::user()->id)->toArray();
+        if (Auth::check()) {
+            $dataUser = User::query()->with(['movies', 'coin'])->find(Auth::user()->id)->toArray();
             foreach ($dataUser['movies'] as $item) {
                 if ($item['id'] == $model['id']) {
                     $trangThaiMuaPhim = true;
                 }
             }
         }
-
-        return view('detail', compact('model', 'phimLienQuan','dataUser','trangThaiMuaPhim','is_vip'));
+        return view('detail', compact('model', 'phimLienQuan', 'is_vip','dataUser'));
     }
-
 
 
     public function apiListFavourite(string $slug)
@@ -99,9 +93,37 @@ class PageController extends Controller
         return response()->json($json, 200);
     }
 
+    public function apiTrangThaiMuaPhim(string $slug)
+    {
+        $model = Movie::query()
+            ->with(['catelogue', 'episode'])
+            ->where('slug', $slug)
+            ->firstOrFail()
+            ->toArray();
+        $trangThaiMuaPhim = false;
+        $dataUser = [];
+        if (Auth::check()) {
+            $dataUser = User::query()->with(['movies', 'coin'])->find(Auth::user()->id)->toArray();
+            foreach ($dataUser['movies'] as $item) {
+                if ($item['id'] == $model['id']) {
+                    $trangThaiMuaPhim = true;
+                }
+            }
+        }
+        if($trangThaiMuaPhim){
+            $json = [
+                'status'=>true
+            ];
+        }else{
+            $json = [
+                'status'=>false
+            ];
+        }
+        return response()->json($json,200);
+    }
 
 
-    public function watch(string $slug, int $tap,Request $request)
+    public function watch(string $slug, int $tap, Request $request)
     {
         // Tìm phim theo slug
         $model = Movie::query()->with(['catelogue', 'episode'])
@@ -119,6 +141,7 @@ class PageController extends Controller
     {
         return view('favourite');
     }
+
     public function addFavourite(Request $request)
     {
         // Kiểm tra xem session 'favourite' đã tồn tại chưa, nếu chưa thì khởi tạo nó với một mảng rỗng
@@ -140,8 +163,9 @@ class PageController extends Controller
         }
 
         // C// Quay lại trang trước
-                return back();
+        return back();
     }
+
     public function removeFavourite(Request $request)
     {
         // Lấy ID của bộ phim cần xóa
@@ -151,7 +175,7 @@ class PageController extends Controller
         $favourites = session('favourite', []);
 
         // Tìm và loại bỏ bộ phim có ID tương ứng khỏi danh sách yêu thích
-        $updatedFavourites = array_filter($favourites, function($movie) use ($id) {
+        $updatedFavourites = array_filter($favourites, function ($movie) use ($id) {
             return $movie['id'] != $id;
         });
 
@@ -169,16 +193,66 @@ class PageController extends Controller
 
         // Debug dữ liệu (nếu cần thiết)
 //         dd($data);
-         $list = Lists::find($id);
+        $list = Lists::find($id);
         // Trả về view 'lists' với dữ liệu đã truy vấn
-        return view('lists', compact('data','list'));
+        return view('lists', compact('data', 'list'));
     }
+
     public function search()
     {
         return view('search');
     }
 
+    public function likeMovie(Request $request)
+    {
+        $data = $request->all();
+        $data['user_id'] = Auth::user()->id;
+        UserMovieLike::query()->create($data);
+    }
 
+    public function unLikeMovie(Request $request)
+    {
+        $data = $request->all();
+        $data['user_id'] = Auth::user()->id;
+        UserMovieLike::query()->where($data)->delete();
+    }
+
+    public function apiUserLike(int $movie_id)
+    {
+        $data = UserMovieLike::where('user_id', Auth::user()->id)->where('movie_id', $movie_id)->first();
+        if ($data) {
+            $json = [
+                'status' => true,
+            ];
+        } else {
+            $json = [
+                'status' => false,
+            ];
+        }
+        return response()->json($json, 200);
+    }
+
+    public function apiCounLikeMovie(int $movie_id)
+    {
+        $data = UserMovieLike::query()->where('movie_id', $movie_id)->count();
+        if ($data) {
+            $json = [
+                'status' => true,
+                'data' => $data
+            ];
+        }elseif($data == null){
+            $json = [
+                'status' => true,
+                'data' => 0
+            ];
+        }
+        else {
+            $json = [
+                'status' => false,
+            ];
+        }
+        return response()->json($json, 200);
+    }
 
 
 }

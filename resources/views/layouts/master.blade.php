@@ -23,7 +23,7 @@
 <header id="trangchu">
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top  shadow fw-bold" style="backdrop-filter: blur(10px);">
         <div class="container">
-            <a class="navbar-brand" href="{{route('home')}}">KienMovie</a>
+            <a class="navbar-brand bounce-in-top" href="{{route('home')}}">KienMovie</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -43,7 +43,7 @@
                     @else
                         @foreach($lists as $key=>$value)
                             <li class="nav-item">
-                                <a class="nav-link" href="#phimle">{{$value}}</a>
+                                <a class="nav-link" href="{{route('lists',$key)}}">{{$value}}</a>
                             </li>
                         @endforeach
                     @endif
@@ -99,9 +99,29 @@
 <div style="min-height: calc(100vh - 196px);margin-top: 90px;" ng-controller="viewCtrl">
     @yield('content')
 </div>
-<footer class="text-center">
-    <p>© 2024 KienMovie. All Rights Reserved.</p>
+<footer class="bg-gray-900 text-white py-4">
+    <div class="container mx-auto px-4">
+        <hr class="border-gray-600 mb-4">
+        <ul class="flex justify-center mt-3">
+            <li class="mr-6">
+                <a href="#" class="hover:text-gray-400">Trung tâm trợ giúp</a>
+            </li>
+            <li class="mr-6">
+                <a href="#" class="hover:text-gray-400">Tuyển dụng việc làm</a>
+            </li>
+            <li class="mr-6">
+                <a href="#" class="hover:text-gray-400">Liên hệ với chúng tôi</a>
+            </li>
+            <li>
+                <a href="#" class="hover:text-gray-400">Thông tin doanh nghiệp</a>
+            </li>
+        </ul>
+        <hr class="border-gray-600 mb-4">
+        <p class="text-sm mb-2">&copy; 2024 KienMovie. All rights reserved.</p>
+    </div>
 </footer>
+
+
 
 <script>
     var myApp = angular.module('myApp', [])

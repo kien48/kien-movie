@@ -52,7 +52,7 @@
                          ng-repeat="item in filteredMovies">
                         <a href="/detail/@{{ item.slug }}" class="nav-link position-relative" data-bs-toggle="tooltip"
                            title="@{{ item.ten }}">
-                            <img src="@{{item.anh}}" alt="" class="img-fluid">
+                            <img src="@{{item.anh}}" alt="" class="img-fluid" width="200px">
                                 <span ng-show="item.gia >=1" class="badge bg-danger rounded-pill position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
                                     </span>

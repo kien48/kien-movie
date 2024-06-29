@@ -1,4 +1,5 @@
 @extends('admin.layouts.master')
+
 @section('content')
     <div class="d-flex justify-content-between mt-3 mb-3">
         <h1 class="text-center h3">Danh sách hóa đơn mua phim</h1>

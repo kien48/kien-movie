@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Bill::class);
     }
+
+    public function isUser()
+    {
+        return $this->type === 'Member';
+    }
 }

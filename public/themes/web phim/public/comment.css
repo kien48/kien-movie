@@ -1,30 +1,54 @@
-.form-container {
-    padding: 20px;
-    background-color: #333;
-    border-radius: 8px;
-}
-.form-control1 {
-    width: 100%;
+
+.comment-container {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
     padding: 10px;
+    margin-bottom: 15px;
     border-radius: 5px;
-    border: 1px solid #555;
-    background-color: #222;
-    color: #fff;
-    resize: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.d-flex {
-    display: flex;
-    align-items: center;
-}
-.comment-container {
-    padding: 10px;
-    background-color: #222;
-    margin-top: 10px;
-    border-radius: 5px;
-    border: 1px solid #444;
-}
 .comment-author {
     font-weight: bold;
-    color: #ff0000;
+}
+
+.comment-text {
+    margin-top: 5px;
+}
+
+.comment-rating {
+    color: #888;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.form-container {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-container textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    resize: none;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.form-container select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.form-container button {
+    padding: 10px 20px;
+    font-size: 0.9em;
 }

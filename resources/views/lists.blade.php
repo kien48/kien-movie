@@ -15,7 +15,7 @@
                         <div class="col-6 col-sm-4 col-md-3 col-lg-2 movie-card mb-3 mt-3">
                             <a href="{{ route('detail', $item->slug) }}" class="nav-link position-relative"
                                data-bs-toggle="tooltip" title="{{ $item->ten }}">
-                                <img src="{{$item->anh}}" alt="" class="img-fluid">
+                                <img src="{{$item->anh}}" alt="" class="img-fluid" width="200px">
                                 @if($item->gia >= 1)
                                     <span class="badge bg-danger rounded-pill position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
