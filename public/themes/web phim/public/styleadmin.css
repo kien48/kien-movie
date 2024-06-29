@@ -1,0 +1,63 @@
+body {
+    background-color: #555555;
+    color: #ffffff;
+}
+.sidebar {
+    background-color: #181818;
+    color: #ffffff;
+    height: calc(100vh - 60px);
+}
+.sidebar a {
+    color: #ffffff;
+    text-decoration: none;
+}
+.sidebar a:hover {
+    color: #e50914;
+}
+.sidebar .nav-item {
+    margin-bottom: 10px;
+}
+.dropdown-menu a {
+    color: black !important;
+}
+.header {
+    background-color: #e50914;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+}
+.nav-link.active {
+    background-color: #e50914;
+    color: white !important;
+}
+.btn-primary {
+    background-color: #e50914;
+    border-color: #e50914;
+}
+.btn-primary:hover {
+    background-color: #bf0411;
+    border-color: #bf0411;
+}
+
+.navbar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+.sidebar {
+    position: fixed;
+    top: 70px; /* Adjust this based on the height of your navbar */
+    bottom: 0;
+    width: 25%;
+    overflow-y: auto;
+    padding-top: 10px;
+}
+.content {
+    margin-top: 70px; /* Adjust this based on the height of your navbar */
+    margin-left: 25%; /* Adjust this based on the width of your sidebar */
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(100vh - 70px); /* Full height minus navbar height */
+}

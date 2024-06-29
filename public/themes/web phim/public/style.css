@@ -1,0 +1,73 @@
+body {
+    background-color: #141414;
+    /*background-image: url('img/xeco.gif');*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: center center;*/
+    /*background-attachment: fixed;*/
+    /*background-size: cover;*/
+    color: #ffffff;
+    position: relative;
+    font-family: 'Sarabun';
+    font-size: 22px;
+}
+
+.navbar {
+    background-color: #141414;
+}
+
+.navbar-brand {
+    color: #e50914 !important;
+    font-weight: bold;
+    font-size: 33px;
+}
+
+.nav-link {
+    color: linen  !important;
+
+
+}
+.nav-item{
+    font-weight: 100;
+    font-size: 20px;
+}
+
+.nav-link.active {
+    font-weight: bold;
+}
+
+.movie-section {
+    margin-top: 30px;
+}
+
+.movie-section h2 {
+    color: #ffffff;
+}
+.img-fluid:hover{
+    transform: scale(1.1);
+    transition: 0.5s;
+}
+
+.movie-section a {
+    color: #ffffff;
+}
+
+.movie-card img {
+    border-radius: 10px;
+    height: 250px;
+}
+
+.movie-card p {
+    color: #aaaaaa;
+    font-size: small;
+}
+
+
+footer {
+    background-color: #141414;
+    color: #aaaaaa;
+    padding: 20px 0;
+}
+
+h4:hover {
+    color: #e50914;
+}

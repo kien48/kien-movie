@@ -1,0 +1,30 @@
+.form-container {
+    padding: 20px;
+    background-color: #333;
+    border-radius: 8px;
+}
+.form-control1 {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #222;
+    color: #fff;
+    resize: none;
+}
+
+.d-flex {
+    display: flex;
+    align-items: center;
+}
+.comment-container {
+    padding: 10px;
+    background-color: #222;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #444;
+}
+.comment-author {
+    font-weight: bold;
+    color: #ff0000;
+}
