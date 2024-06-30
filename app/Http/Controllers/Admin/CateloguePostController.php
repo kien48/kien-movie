@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CateloguePost;
+use App\Models\TagPost;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -50,7 +52,7 @@ class CateloguePostController extends Controller
         $data = $request->all();
         $data['slug'] = str::slug($data['ten']);
         CateloguePost::query()->create($data);
-        return back();
+        return back()->with('success','Xóa thành công');
 
 
     }
@@ -93,16 +95,21 @@ class CateloguePostController extends Controller
         $data = $request->all();
         $data['slug'] = str::slug($data['ten']);
         $cateloguePost->update($data);
-        return back();
+        return back()->with('success','Xóa thành công');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CateloguePost $cateloguePost)
+    public function destroy(string $id)
     {
         //
-        $cateloguePost->delete();
-        return back();
+        $dataCatePost = DB::table('posts')->where('catelogue_post_id',$id)->count();
+        if($dataCatePost == null){
+           CateloguePost::query()->where('id',$id)->delete();
+            return  back()->with('success','Xóa thành công');
+        }else{
+            return back()->with('error','Có bài viết đang liên kết với danh mục này không thể xóa');
+        }
     }
 }

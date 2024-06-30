@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -42,6 +43,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
+        $validator = Validator::make($request->all(),[
+            'tieu_de'=>"required|max:255|string",
+            'catelogue_post_id'=>'required',
+            'tag'=>'required',
+            'noi_dung'=>'required'
+        ]);
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput();
+        }
+
         $dataPost = $request->except('tag');
         $dataPost['user_id'] = Auth::user()->id;
         $dataPost['slug'] = \Str::slug($dataPost['tieu_de']);
@@ -60,10 +72,10 @@ class PostController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('admin.posts.index')->with('success', 'Post created successfully');
+            return redirect()->route('admin.posts.index')->with('success', 'Thêm bài viết thành công');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withErrors(['error' => 'Something went wrong, please try again: ' . $e->getMessage()]);
+            return back()->with('error','Lỗi rồi'.$e->getMessage());
         }
     }
 
@@ -91,6 +103,16 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        $validator = Validator::make($request->all(),[
+            'tieu_de'=>"required|max:255|string",
+            'catelogue_post_id'=>'required',
+            'tag'=>'required',
+            'noi_dung'=>'required'
+        ]);
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput();
+        }
+
         $model = Post::query()->with('tags')->find($post)->toArray();
         $dataPost = $request->except('tag');
         $dataPost['user_id'] = Auth::user()->id;
@@ -112,10 +134,10 @@ class PostController extends Controller
             if( $request->hasFile('anh') && $model[0]['anh'] && Storage::exists($model[0]['anh'])){
                 Storage::delete($model[0]['anh']);
             }
-            return redirect()->route('admin.posts.index');
+            return back()->with('success','Cập nhật thành công');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back();
+            return back()->with('error','Lỗi rồi'.$e->getMessage());
         }
     }
 
@@ -129,10 +151,10 @@ class PostController extends Controller
             $post->tags()->sync([]);
             $post->delete();
             DB::commit();
-            return back();
+            return back()->with('success','Xóa thành công');
         }catch (\Exception $e){
             DB::rollBack();
-            return back();
+            return back()->with('error','Lỗi rồi'. $e->getMessage());
         }
     }
 }

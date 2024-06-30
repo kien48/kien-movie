@@ -26,11 +26,13 @@ class AppServiceProvider extends ServiceProvider
     {
         //
 
-        $postHot = Post::query()->orderByDesc('luot_xem')->limit(4)->get();
-        $danhMuc = CateloguePost::query()->pluck('ten','id')->all();
-        $tags = TagPost::query()->pluck('ten','id')->all();
+        $postHot = Post::query()->where('catelogue_post_id','!=',3)->orderByDesc('luot_xem')->limit(4)->get();
+        $danhMuc = CateloguePost::query()->where('id','!=',3)->get();
+        $tags = TagPost::query()->get();
         $lists = Lists::query()->pluck('ten','id')->all();
+        $postFooter = Post::query()->where('catelogue_post_id',3)->get();
         View::share([
+            'postFooter'=>$postFooter,
             'postHot' => $postHot,
             'danhMuc' => $danhMuc,
             'tags' => $tags,

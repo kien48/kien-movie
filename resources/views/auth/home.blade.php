@@ -40,7 +40,7 @@
                         <a href="{{route('napXu')}}" class="btn btn-outline-primary mt-3 w-100 btn-lg">Nạp xu</a>
                         <a href="{{route('purchasedMovies')}}" class="btn btn-outline-success mt-3 w-100 btn-lg">Phim đã
                             mua</a>
-                        <a href="" class="btn btn-outline-warning mt-3 w-100 btn-lg">Đổi mật khẩu</a>
+                        <a href="{{route('capnhattk')}}" class="btn btn-outline-warning mt-3 w-100 btn-lg">Cập nhật tài khoản</a>
                         <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"
                            class="btn btn-outline-danger mt-3 w-100 btn-lg">Đăng xuất</a>

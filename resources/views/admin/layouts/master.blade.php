@@ -32,6 +32,9 @@
                 <h2>Menu</h2>
                 <ul class="nav flex-column">
                     <li class="nav-item">
+                        <a class="nav-link @if(Str::contains(Route::currentRouteName(), 'admin.home')) active @endif" href="{{ route('admin.home') }}">Trang DashBoard</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link @if(Str::contains(Route::currentRouteName(), 'admin.movies')) active @endif" href="{{ route('admin.movies.index') }}">Phim</a>
                     </li>
                     <li class="nav-item">
@@ -42,6 +45,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(Str::contains(Route::currentRouteName(), 'admin.catelogue-posts')) active @endif" href="{{ route('admin.catelogue-posts.index') }}">Danh mục bài viết</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(Str::contains(Route::currentRouteName(), 'admin.tagposts')) active @endif" href="{{ route('admin.tagposts.index') }}">Tag bài viết</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(Str::contains(Route::currentRouteName(), 'admin.payments')) active @endif" href="{{ route('admin.payments.index') }}">Lịch sử nạp xu</a>

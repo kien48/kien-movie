@@ -7,6 +7,12 @@
         <h1 class="text-center h3">Danh sách danh mục bài viết</h1>
         <a href="{{route('admin.catelogue-posts.create')}}" class="btn btn-primary">Thêm mới</a>
     </div>
+    @if(session('success'))
+        <li class="text-success">{{session('success')}}</li>
+    @endif
+    @if(session('error'))
+        <li class="text-danger">{{session('error')}}</li>
+    @endif
     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
         <thead>
         <tr>
@@ -51,7 +57,7 @@
 
         <script>
             new DataTable('#example', {
-                order: [[1, 'desc']]
+                order: [[0, 'desc']]
             });
         </script>
     @endsection

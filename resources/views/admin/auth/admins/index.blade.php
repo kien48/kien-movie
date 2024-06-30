@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <div class="d-flex justify-content-between mt-3 mb-3">
-        <h1 class="text-center h3">Danh sách tài khoản người dùng</h1>
+        <h1 class="text-center h3">Danh sách tài khoản Admin</h1>
     </div>
     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
         <thead>
@@ -47,7 +47,7 @@
 
         <script>
             new DataTable('#example', {
-                order: [[1, 'desc']]
+                order: [[0, 'desc']]
             });
         </script>
     @endsection

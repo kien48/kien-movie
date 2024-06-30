@@ -5,7 +5,7 @@
 @section('content')
     <div class="container movie-section" style="margin-top: 100px;">
         <div class="row">
-            <div class="col-3 position-relative">
+            <div class="col-md-3 col-12 position-relative">
                 <img src="{{$model['anh']}}" alt="" class="img-fluid"
                      style="border-radius: 10px;width: 290px;height: 450px">
                 @if($model['gia'] >= 1)
@@ -21,7 +21,7 @@
                                     </span>
                 @endif
             </div>
-            <div class="col-9">
+            <div class="col-md-9 col-12">
                 <h3 class="mb-3"
                     style="font-weight: 700;font-size: 50px;@if($model['gia'] >= 1) color:red @elseif($model['is_vip'] == true) color:#fffa06 @else color:white @endif">{{$model['ten']}} </h3>
                 <h5 class="font-monospace text-light-emphasis mt-3">{{$model['chat_luong']}}
@@ -229,6 +229,8 @@
         </div>
     </div>
 
+    <audio id="likeSound" src="{{asset('/')}}/themes/web phim/public/img/click.mp3" preload="auto"></audio>
+    <audio id="loveSound" src="{{asset('/')}}/themes/web phim/public/img/love.mp3" preload="auto"></audio>
 
     @section('js')
         <script>
@@ -238,7 +240,7 @@
                     $http.post('{{ route("add") }}', {
                         movie_id: '{{ $model["id"] }}'
                     }).then(response => {
-                        alert('Thêm vào mục yêu thích thành công');
+                        playLoveSound()
                         $scope.kiemTra();
                     }).catch(error => {
                         alert('Error');
@@ -250,7 +252,6 @@
                     $http.post('{{ route("remove") }}', {
                         id: '{{ $model["id"] }}'
                     }).then(response => {
-                        alert('Xóa khỏi mục yêu thích thành công');
                         $scope.kiemTra();
                     }).catch(error => {
                         alert('Error');
@@ -275,6 +276,7 @@
                     }).then(function (res) {
                         $scope.checkLike();
                         $scope.countLikeMovie();
+                        playLikeSound()
                     }).catch(error => {
                         console.error(error);
                     })
@@ -299,16 +301,17 @@
                 }
                 $scope.checkLike();
 
-                $scope.countLike = 0;
                 $scope.countLikeMovie = () => {
                     $http.get('http://movie.test/api/count-like/{{$model['id']}}')
                         .then(function (res) {
-                            $scope.countLike = res.data.data
+                            $scope.countLike = res.data.data;
                         }).catch(error => {
                         console.error(error);
-                    })
-                }
+                    });
+                };
+
                 $scope.countLikeMovie();
+                setInterval($scope.countLikeMovie, 1000);
 
 
                 $scope.muaPhim = () => {
@@ -331,6 +334,14 @@
                     })
                 }
                 $scope.ttMuaPhim();
+                function playLikeSound() {
+                    likeSound.currentTime = 0;
+                    likeSound.play();
+                }
+                function playLoveSound() {
+                    loveSound.currentTime =0;
+                    loveSound.play()
+                }
             };
         </script>
     @endsection

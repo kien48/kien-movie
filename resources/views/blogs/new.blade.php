@@ -1,5 +1,5 @@
 @extends('blogs.blogs')
-@section('tilte')
+@section('title-post')
     Tin mới nhất
 @endsection
 @section('content-post')

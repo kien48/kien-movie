@@ -96,25 +96,18 @@
     </nav>
 </header>
 
-<div style="min-height: calc(100vh - 196px);margin-top: 90px;" ng-controller="viewCtrl">
+<div style="min-height: calc(100vh - 315px);margin-top: 90px;" ng-controller="viewCtrl">
     @yield('content')
 </div>
 <footer class="bg-gray-900 text-white py-4">
     <div class="container mx-auto px-4">
         <hr class="border-gray-600 mb-4">
         <ul class="flex justify-center mt-3">
-            <li class="mr-6">
-                <a href="#" class="hover:text-gray-400">Trung tâm trợ giúp</a>
-            </li>
-            <li class="mr-6">
-                <a href="#" class="hover:text-gray-400">Tuyển dụng việc làm</a>
-            </li>
-            <li class="mr-6">
-                <a href="#" class="hover:text-gray-400">Liên hệ với chúng tôi</a>
-            </li>
-            <li>
-                <a href="#" class="hover:text-gray-400">Thông tin doanh nghiệp</a>
-            </li>
+            @foreach($postFooter as $post)
+                <li class="mr-6">
+                    <a href="{{route('chitiet',$post->slug)}}" class="hover:text-gray-400">{{$post->tieu_de}}</a>
+                </li>
+            @endforeach
         </ul>
         <hr class="border-gray-600 mb-4">
         <p class="text-sm mb-2">&copy; 2024 KienMovie. All rights reserved.</p>

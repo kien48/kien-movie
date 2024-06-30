@@ -7,6 +7,12 @@
         <h1 class="text-center h3">Danh sách thể loại</h1>
         <a href="{{route('admin.catelogues.create')}}" class="btn btn-primary">Thêm mới</a>
     </div>
+    @if(session('error'))
+            <li>{{session('error')}}</li>
+    @endif
+    @if(session('success'))
+        <li class="text-success">{{session('success')}}</li>
+    @endif
     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
         <thead>
         <tr>
@@ -25,7 +31,11 @@
                 <td>{{$catelogue->slug}}</td>
                 <td class="text-nowrap" style="width: 1px;">
                     <a href="{{route('admin.catelogues.edit', $catelogue->id)}}" class="btn btn-outline-warning">Sửa</a>
-                    <a href="http://" class="btn btn-outline-danger">Xóa</a>
+                    <form action="{{route('admin.catelogues.destroy', $catelogue->id)}}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button onclick="return confirm('xóa nhé')" class="btn btn-outline-danger" type="submit">Xóa</button>
+                    </form>
                 </td>
             </tr>
         @endforeach
@@ -47,7 +57,7 @@
 
         <script>
             new DataTable('#example', {
-                order: [[1, 'desc']]
+                order: [[0, 'desc']]
             });
         </script>
     @endsection

@@ -207,7 +207,7 @@ class PageController extends Controller
     {
         $data = $request->all();
         $data['user_id'] = Auth::user()->id;
-        UserMovieLike::query()->create($data);
+        UserMovieLike::create($data);
     }
 
     public function unLikeMovie(Request $request)

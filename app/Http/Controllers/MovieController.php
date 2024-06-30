@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Catelogue;
+use App\Models\Episode;
 use App\Models\Lists;
 use App\Models\Movie;
 use App\Models\MovieCatelogue;
@@ -37,9 +38,17 @@ class MovieController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function apiTapPhim(int $id,int $tap)
     {
-        //
+        $data = Episode::where('movie_id', $id)->where('tap', $tap)->first();
+        $tap = $data->tap;
+        $luotXem = $data->luot_xem;
+        $json = [
+            'status'=>true,
+            'tap'=>$tap,
+            'luot_xem'=>$luotXem
+        ];
+        return response()->json($json,200);
     }
 
     /**
@@ -47,7 +56,8 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        Episode::where('movie_id', $data['movie_id'])->where('tap', $data['tap'])->increment('luot_xem',1);
     }
 
     /**

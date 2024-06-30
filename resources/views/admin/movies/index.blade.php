@@ -7,6 +7,12 @@
         <h1 class="text-center h3">Danh sách phim</h1>
         <a href="{{route('admin.movies.create')}}" class="btn btn-primary">Thêm mới</a>
     </div>
+    @if(session('success'))
+        <li class="text-success">{{session('success')}}</li>
+    @endif
+    @if(session('error'))
+        <li class="text-danger">{{session('error')}}</li>
+    @endif
     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
         <thead>
         <tr>
@@ -36,7 +42,6 @@
                 <td class="text-nowrap" style="width: 1px;">
                     <a href="{{route('admin.movies.show',$movie->slug)}}" class="btn btn-outline-info">Xem</a>
                     <a href="{{route('admin.movies.edit',$movie->slug)}}" class="btn btn-outline-warning">Sửa</a>
-                    <a href="http://" class="btn btn-outline-danger">Xóa</a>
                 </td>
             </tr>
         @endforeach
@@ -58,7 +63,7 @@
 
         <script>
             new DataTable('#example', {
-                order: [[1, 'desc']]
+                order: [[0, 'desc']]
             });
         </script>
     @endsection

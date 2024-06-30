@@ -16,6 +16,12 @@
                             </ul>
                         </div>
                     @endif
+                    @if(session('success'))
+                        <li class="text-success">{{session('success')}}</li>
+                    @endif
+                    @if(session('error'))
+                        <li class="text-danger">{{session('error')}}</li>
+                    @endif
                     <div class="row">
                         <div class="mb-3  col-6">
                             <label for="ten" class="form-label">Tên phim:</label>

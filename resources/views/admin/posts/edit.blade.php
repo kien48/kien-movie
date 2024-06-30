@@ -10,6 +10,12 @@
                     <li>{{$error}}</li>
                 @endforeach
             @endif
+            @if(session('success'))
+                <li class="text-success">{{session('success')}}</li>
+            @endif
+            @if(session('error'))
+                <li class="text-danger">{{session('error')}}</li>
+            @endif
             <div class="row">
                 <div class="mt-3 col-6">
                     <label class="form-label">Tiêu đề</label>
@@ -18,7 +24,7 @@
                 <div class="mt-3 col-6">
                     <label class="form-label">Ảnh</label>
                     <input type="file" name="anh" id="" class="form-control">
-                    <img src="{{$model[0]['anh']}}" alt="" width="100px">
+                    <img src="{{\Storage::url($model[0]['anh'])}}" alt="" width="100px">
                 </div>
                 <div class="mt-3 col-6">
                     <label class="form-label">Danh mục: </label>

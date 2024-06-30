@@ -97,16 +97,16 @@
             <div class="box">
                 <h3>Danh mục</h3>
                 <div class="categories">
-                    @foreach($danhMuc as $key=>$value)
-                        <a href="#">{{$value}}</a>
+                    @foreach($danhMuc as $item)
+                        <a href="{{route('danhMucBaiViet',[$item->id,$item->slug])}}">{{$item->ten}}</a>
                     @endforeach
                 </div>
             </div>
             <div class="box">
                 <h3>Tags</h3>
                 <div class="tags">
-                    @foreach($tags as $key=>$value)
-                        <a href="#">{{$value}}</a> @endforeach
+                    @foreach($tags as $item)
+                        <a href="{{route('tagBaiViet',[$item->id,$item->slug])}}">{{$item->ten}}</a> @endforeach
                 </div>
             </div>
         @endif

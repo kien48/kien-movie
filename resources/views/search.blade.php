@@ -41,6 +41,17 @@
                             </select>
                         </div>
                         <div class="col-4 mb-3">
+                            <select class="form-select form-select-lg" ng-model="selectedPrice"
+                                    ng-change="filterMovies()">
+                                <option value="">Giá phim</option>
+                                <option value="10000">Trên 10,000 xu</option>
+                                <option value="20000">Trên 20,000 xu</option>
+                                <option value="50000">Trên 50,000 xu</option>
+                                <option value="100000">Trên 100,000 xu</option>
+                                <option value="200000">Trên 200,000 xu</option>
+                            </select>
+                        </div>
+                        <div class="col-4 mb-3">
                             <button type="button" class="btn btn-danger btn-lg w-100" ng-click="reset()">Đặt lại
                             </button>
                         </div>
@@ -102,7 +113,9 @@
                             // Kiểm tra phim thuộc danh sách đã chọn ($scope.selectedList)
                             (!$scope.selectedList || item.list_id == $scope.selectedList) &&
                             // Kiểm tra phim phát hành vào năm đã chọn ($scope.selectedYear)
-                            (!$scope.selectedYear || item.nam_phat_hanh == $scope.selectedYear)
+                            (!$scope.selectedYear || item.nam_phat_hanh == $scope.selectedYear) &&
+                            (!$scope.selectedPrice || item.gia >= $scope.selectedPrice)
+
                         );
                     });
                 };

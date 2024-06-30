@@ -10,41 +10,55 @@
         <div class="row mt-4">
 
             <div class="col-8">
-                <iframe src="{{$episode['link']}}" frameborder="0" allowfullscreen loading="lazy" width="100%"
-                        height="500"></iframe>
-
+                <iframe id="iframe" src="{{$episode['link']}}" frameborder="0" allowfullscreen loading="lazy"
+                        width="100%" height="500"></iframe>
             </div>
-
             <div class="col-4">
-                <h3 class="mb-3"
-                    style="font-weight: 700;font-size: 40px;@if($model['gia'] >= 1) color:red @elseif($model['is_vip'] == true) color:#fffa06 @else color:white @endif">{{$model['ten']}} </h3>
+                <h5 class="h4 mb-3"
+                    style="font-weight: 700;font-size: 35px;@if($model['gia'] >= 1) color:red @elseif($model['is_vip'] == true) color:#fffa06 @else color:white @endif">{{$model['ten']}} </h5>
                 <h5 class="font-monospace text-light-emphasis mt-3">{{$model['chat_luong']}}
                     ● {{$model['ngon_ngu']}} </h5>
                 <h5 class="font-monospace text-light-emphasis mt-3">Số tập: {{$model['so_tap']}} | Hiện
                     tại: {{$model['trang_thai']}} </h5>
                 <h5 class="font-monospace text-light-emphasis mt-3">Năm phát hành: {{$model['nam_phat_hanh']}}</h5>
-                    <h5 class="font-monospace text-light-emphasis mt-3">Thể loại:
-                        @if(count($model['catelogue']) >=1)
-                            @foreach($model['catelogue'] as $data)
-                                | {{$data['ten']}} |
-                            @endforeach
-                        @else
-                            Đang cập nhật
-                        @endif
-                    </h5>
-                    <h5 class="h4 mt-3" data-bs-toggle="tooltip"
-                        title="{{$model['mo_ta']}}!">{{substr($model['mo_ta'],0,100)}}... </h5>
-                        <div class="d-flex mt-3">
-                            <h5 class="font-monospace text-light-emphasis">Diễn viên:</h5>
-                            <h5> {{$model['dien_vien']}} </h5>
-                        </div>
-                        <div class="d-flex mt-3">
-                            <h5 class="font-monospace text-light-emphasis">Đạo diễn:</h5>
-                            <h5> {{$model['dao_dien']}} </h5>
-                        </div>
-
+                <h5 class="font-monospace text-light-emphasis mt-3">Thể loại:
+                    @if(count($model['catelogue']) >=1)
+                        @foreach($model['catelogue'] as $data)
+                            | {{$data['ten']}} |
+                        @endforeach
+                    @else
+                        Đang cập nhật
+                    @endif
+                </h5>
+                <h5 class="h4 mt-3" data-bs-toggle="tooltip"
+                    title="{{$model['mo_ta']}}!">{{substr($model['mo_ta'],0,100)}}... </h5>
+                <div class="d-flex mt-3">
+                    <h5 class="font-monospace text-light-emphasis">Diễn viên:</h5>
+                    <h5> {{$model['dien_vien']}} </h5>
+                </div>
+                <div class="d-flex mt-3">
+                    <h5 class="font-monospace text-light-emphasis">Đạo diễn:</h5>
+                    <h5> {{$model['dao_dien']}} </h5>
+                </div>
             </div>
         </div>
+
+        <!-- Tập và Lượt xem -->
+        <div class="row mt-3">
+            <div class="col-6">
+                <div class="d-flex">
+                    <h5 class="h4 font-monospace text-light-emphasis">Tập: </h5>
+                    <h5 class="h4 ms-2">@{{ tapPhim }}</h5>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="d-flex">
+                    <h5 class="h4 font-monospace text-light-emphasis">Lượt xem: </h5>
+                    <h5 class="h4 ms-2">@{{ luotXem }}</h5>
+                </div>
+            </div>
+        </div>
+
         <div class="row mt-4">
             <h3>Danh sách tập phim: </h3>
             <div class="col-8">
@@ -58,15 +72,16 @@
                 @endforeach
             </div>
         </div>
+
         <div class="container">
             <div class="row mt-5">
                 <h3>Bình luận:</h3>
                 <div class="col-4 form-container">
                     <form action="" method="post">
                         <div class="d-flex flex-column">
-                        <textarea name="content" id="comment" class="form-control1"
-                                  placeholder="Nhập bình luận..." ng-model="content"></textarea>
-                            <div class="rating-container">
+                            <textarea name="content" id="comment" class="form-control1"
+                                      placeholder="Nhập bình luận..." ng-model="content"></textarea>
+                            <div class="rating-container mt-2">
                                 <label for="rating">Đánh giá sao:</label>
                                 <select name="rating" id="rating" class="form-control" ng-model="sao">
                                     <option value="" selected>Đánh giá sao</option>
@@ -102,21 +117,20 @@
 
     @section('js')
         <script>
-            viewFunction = function ($scope, $http) {
+            viewFunction = function ($scope, $http, $sce, $interval) {
                 $scope.listComments = [];
                 $scope.content = ''
                 $scope.getComment = () => {
                     $http.get('http://movie.test/api/comment/movie/{{ $model['id'] }}')
                         .then(function (response) {
                             $scope.listComments = response.data.data;
-
                         })
                         .catch(function (error) {
-                            alert('Đã xảy ra lỗi khi tải dữ liệu');
                             console.error(error);
                         });
                 }
                 $scope.getComment()
+                setInterval($scope.getComment, 1000)
                 $scope.send = () => {
                     $http.post('http://movie.test/api/comment',
                         {
@@ -130,7 +144,40 @@
                             $scope.getComment()
                         })
                 }
+
+                $scope.tapPhim = '';
+                $scope.luotXem = '';
+
+                $scope.getLuotXem = () => {
+                    $http.get('http://movie.test/api/luot-xem-tap-phim/{{$model['id']}}/{{$episode['tap']}}')
+                        .then(function (res) {
+                            $scope.tapPhim = res.data.tap;
+                            $scope.luotXem = res.data.luot_xem;
+                        }).catch(function (error) {
+                        console.log(error)
+                    })
+                }
+                $scope.getLuotXem();
+                setInterval($scope.getLuotXem, 5000)
+                $scope.themLuotXem = ()=>{
+                    $http.post('{{route('themLuotXemPhim')}}',{
+                        movie_id : {{$model['id']}},
+                        tap : {{$episode['tap']}}
+                    }).then(function (res){
+                        $scope.getLuotXem();
+                    })
+                }
+                var minThoiGian = 20;
+                var demNguoc = setInterval(function (){
+                    minThoiGian--;
+                    if(minThoiGian <= 0){
+                        clearTimeout(demNguoc);
+                        $scope.themLuotXem()
+                    }
+                },1000)
+
             };
+
 
         </script>
     @endsection

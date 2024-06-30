@@ -47,9 +47,8 @@
 
         <script>
             new DataTable('#example', {
-                order: [[1, 'desc']]
+                order: [[0, 'desc']]
             });
-        </script>
     @endsection
     @section('css')
         <!--datatable css-->

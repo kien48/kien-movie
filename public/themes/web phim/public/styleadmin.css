@@ -61,3 +61,7 @@ body {
     overflow-y: auto;
     height: calc(100vh - 70px); /* Full height minus navbar height */
 }
+
+.active{
+    border-radius: 10px;
+}

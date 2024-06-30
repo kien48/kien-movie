@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('tap');
             $table->text('link');
+            $table->bigInteger('luot_xem')->default(0);
             $table->foreignIdFor(\App\Models\movie::class)->constrained();
             $table->timestamps();
         });

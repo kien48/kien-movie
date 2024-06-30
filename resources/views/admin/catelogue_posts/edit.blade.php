@@ -10,6 +10,12 @@
                     <li>{{$error}}</li>
                 @endforeach
             @endif
+            @if(session('success'))
+                <li class="text-success">{{session('success')}}</li>
+            @endif
+            @if(session('error'))
+                <li class="text-danger">{{session('error')}}</li>
+            @endif
             <div class="mt-3">
                 <label class="form-label">Tên</label>
                 <input type="text" name="ten" id="" class="form-control" value="{{$model[0]['ten']}}">

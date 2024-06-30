@@ -20,7 +20,7 @@ class MovieController extends Controller
     const PATH_VIEW = "admin.movies.";
     public function index()
     {
-        $data = Movie::query()->latest('id')->get();
+        $data = Movie::query()->orderByDesc('id')->get();
         return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
     }
 
@@ -96,12 +96,12 @@ class MovieController extends Controller
 
             // Commit transaction
             DB::commit();
-            return redirect()->route('admin.movies.index');
+            return back()->with('success','Thêm sản phẩm thành công');
 
         } catch (\Exception $exception) {
             // Rollback transaction nếu có lỗi
             DB::rollBack();
-            return back();
+            return back()->with('error','Xóa lỗi');
         }
     }
 
@@ -201,14 +201,11 @@ class MovieController extends Controller
             // Thêm các tập phim mới vào
             Episode::insert($tapPhimData);
 
-            // Đồng bộ hóa danh mục phim
             $movie->catelogue()->sync($request->input('catelogue_id'));
 
-            // Xác nhận giao dịch thành công
             DB::commit();
 
-            // Chuyển hướng đến route admin.movies.index
-            return redirect()->route('admin.movies.index');
+            return back()->with('success','Cập nhật thành công');
         } catch (\Exception $exception) {
             // Quay lại trang trước đó nếu có lỗi xảy ra và thông báo lỗi
             DB::rollBack();

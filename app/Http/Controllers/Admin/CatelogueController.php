@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Catelogue;
+use App\Models\Movie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Psy\Util\Str;
 
@@ -51,7 +53,7 @@ class CatelogueController extends Controller
         $ten = $data['ten'];
         $data['slug'] =  \Illuminate\Support\Str::slug($ten);
         Catelogue::query()->create($data);
-        return redirect()->route('admin.catelogues.index');
+        return back()->with('success','Thêm thể loại thành công');
     }
 
     /**
@@ -92,7 +94,7 @@ class CatelogueController extends Controller
         $ten = $data['ten'];
         $data['slug'] =  \Illuminate\Support\Str::slug($ten);
         Catelogue::query()->where('id',$id)->update($data);
-        return redirect()->route('admin.catelogues.index');
+        return back()->with('success','Cập nhật thể loại thành công');
     }
 
     /**
@@ -100,6 +102,12 @@ class CatelogueController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $dataMovie = DB::table('movie_catelogue')->where('catelogue_id',$id)->count();
+        if($dataMovie == null){
+            Catelogue::query()->where('id',$id)->delete();
+            return  back();
+        }else{
+            return back()->with('error','Có phim đang liên kết với thể loại này không thể xóa');
+        }
     }
 }

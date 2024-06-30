@@ -10,6 +10,12 @@
                     <li>{{$error}}</li>
                 @endforeach
             @endif
+            @if(session('success'))
+                <li class="text-success">{{session('success')}}</li>
+            @endif
+            @if(session('error'))
+                <li class="text-danger">{{session('error')}}</li>
+            @endif
             <div class="row">
                 <div class="mt-3 col-6">
                     <label class="form-label">Tiêu đề</label>

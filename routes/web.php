@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CatelogueController;
 use App\Http\Controllers\Admin\CateloguePostController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\TagPostController;
 use App\Http\Controllers\Auth\HomeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MovieController;
@@ -47,8 +48,12 @@ use Illuminate\Support\Facades\Route;
 
     Route::get('/blogs', [App\Http\Controllers\PostController::class, 'index'])->name('blogs');
     Route::get('/chi-tiet/{slug}', [App\Http\Controllers\PostController::class, 'detail'])->name('chitiet');
+    Route::get('/danh-muc-bai-viet/{id}/{slug}', [App\Http\Controllers\PostController::class, 'catelogue'])->name('danhMucBaiViet');
+    Route::get('/tag-bai-viet/{id}/{slug}', [App\Http\Controllers\PostController::class, 'tag'])->name('tagBaiViet');
+    Route::post('/them-luot-xem', [App\Http\Controllers\PostController::class, 'themLuotXem'])->name('themLuotXem');
 
     Auth::routes();
+    Route::post('/them-luot-xem-phim', [App\Http\Controllers\MovieController::class, 'store'])->name('themLuotXemPhim');
 
 Route::middleware('auth')->group(function () {
     Route::get('/nap-xu', [App\Http\Controllers\UserCoinController::class, 'napXu'])->name('napXu');
@@ -56,6 +61,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/mua-phim', [App\Http\Controllers\UserCoinController::class, 'muaPhim'])->name('muaPhim');
     Route::get('/tai-khoan', [HomeController::class, 'index'])->name('index');
     Route::get('/phim-da-mua', [HomeController::class, 'purchasedMovies'])->name('purchasedMovies');
+    Route::get('/cap-nhat-tai-khoan', [App\Http\Controllers\Auth\EditController::class, 'edit'])->name('capnhattk');
+    Route::post('/cap-nhat-tai-khoan', [App\Http\Controllers\Auth\EditController::class, 'update'])->name('updatetk');
+
 });
 
 Route::prefix('api')->group(function (){
@@ -68,7 +76,8 @@ Route::prefix('api')->group(function (){
     Route::get('/like/{movie_id}', [\App\Http\Controllers\PageController::class, 'apiUserLike']);
     Route::get('/count-like/{movie_id}', [\App\Http\Controllers\PageController::class, 'apiCounLikeMovie']);
     Route::get('/mua-phim-status/{slug}', [\App\Http\Controllers\PageController::class, 'apiTrangThaiMuaPhim']);
-
+    Route::get('/luot-xem-bai-viet/{id}', [\App\Http\Controllers\PostController::class, 'apiLuotXemBaiViet']);
+    Route::get('/luot-xem-tap-phim/{id}/{tap}', [\App\Http\Controllers\MovieController::class, 'apiTapPhim']);
 
 });
 
@@ -94,7 +103,8 @@ Route::prefix('api')->group(function (){
             Route::resource('bills', BillController::class);
             Route::resource('catelogue-posts', CateloguePostController::class);
             Route::resource('posts', PostController ::class);
-
+            Route::resource('tagposts', TagPostController ::class);
+            Route::get('/',[\App\Http\Controllers\Admin\DashBoardController::class,'index'])->name('home');
 
         });
 
