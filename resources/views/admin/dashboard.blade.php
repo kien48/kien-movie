@@ -147,7 +147,8 @@
             </div>
         </div>
     </div>
-@endsection
-@section('js')
+    @section('js')
 
+    @endsection
 @endsection
+
