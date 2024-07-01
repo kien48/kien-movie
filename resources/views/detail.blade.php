@@ -86,7 +86,7 @@
                                     @else
                                         <div class="mt-3" ng-show="statusMuaPhim == false">
                                             <button data-bs-toggle="modal" data-bs-target="#myModalMuaPhim"
-                                                    class="btn btn-outline-warning"
+                                                    class="btn btn-outline-warning wobble-hor-bottom"
                                                     style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                                                 <h2 style="margin: 0; display: flex; align-items: center;color: white;">
                                                     <i class="fa-solid fa-bag-shopping"
@@ -118,7 +118,7 @@
 
                             <div class="mt-3 ms-3" ng-show="ketqua === false">
                                 <form action="" method="post">
-                                    <button ng-click="add()" type="button" class="btn btn-outline-danger"
+                                    <button ng-click="add()" type="button" class="btn btn-outline-danger @{{ out }}"
                                             style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                                         <h2 style="margin: 0; display: flex; align-items: center;color: white;">
                                             <i class="fa-solid fa-heart"></i>
@@ -128,7 +128,7 @@
                             </div>
                             <div class="mt-3 ms-3" ng-show="ketqua === true">
                                 <form action="" method="post">
-                                    <button ng-click="remove()" type="button" class="btn btn-danger"
+                                    <button ng-click="remove()" type="button" class="btn btn-danger @{{ in }}"
                                             style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                                         <h2 style="margin: 0; display: flex; align-items: center;color: white;">
                                             <i class="fa-solid fa-heart"></i>
@@ -141,7 +141,7 @@
                                 <div class="mt-3 ms-3">
                                     <form action="" method="post">
                                         <button ng-show="like == true" ng-click="unLike()" type="button"
-                                                class="btn btn-info"
+                                                class="btn btn-info jello-vertical"
                                                 style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                                             <h2 style="margin: 0; display: flex; align-items: center;color: white;">
                                                 <i class="fa-solid fa-thumbs-up"></i>
@@ -176,14 +176,21 @@
                                data-bs-toggle="tooltip" title="{{ $item['ten'] }}">
                                 <img src="{{$item['anh']}}" alt="" class="img-fluid" width="200px">
                                 @if($item['gia'] >= 1)
-                                    <span class="badge bg-danger rounded-pill position-absolute top-0 end-0">
+                                    <span class="badge bg-danger rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
                                     </span>
                                 @elseif($item['is_vip'] == true)
-                                    <span class="badge bg-warning rounded-pill position-absolute top-0 end-0">
+                                    <span class="badge bg-warning rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                                 @endif
+                                <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                    @if($item['trang_thai'] == 'Full')
+                                        Full
+                                    @else
+                                        Đang chiếu
+                                    @endif
+                                </span>
                             </a>
                         </div>
                     @endforeach
@@ -235,15 +242,19 @@
     @section('js')
         <script>
             viewFunction = ($scope, $http) => {
+                $scope.out = ''
+                $scope.in = ''
                 // Thêm phim vào danh sách yêu thích
                 $scope.add = function () {
                     $http.post('{{ route("add") }}', {
                         movie_id: '{{ $model["id"] }}'
                     }).then(response => {
+                        $scope.out = 'scale-out-center'
+                        $scope.in = ''
                         playLoveSound()
                         $scope.kiemTra();
                     }).catch(error => {
-                        alert('Error');
+                        console.error('Error');
                     });
                 };
 
@@ -252,9 +263,11 @@
                     $http.post('{{ route("remove") }}', {
                         id: '{{ $model["id"] }}'
                     }).then(response => {
+                        $scope.out = ''
+                        $scope.in = 'scale-out-center'
                         $scope.kiemTra();
                     }).catch(error => {
-                        alert('Error');
+                        console.error('Error');
                     });
                 };
 

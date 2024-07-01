@@ -107,10 +107,11 @@
         <video src="{{ asset('/') }}/themes/web phim/public/img/video.mp4" autoplay muted></video>
         <div class="content">
             <h1>君の名は。</h1>
-            <p>Mitsuha Miyamizu, một nữ sinh trung học, khao khát được sống cuộc sống của một cậu bé ở thành phố Tokyo nhộn nhịp...</p>
+            <p>Mitsuha Miyamizu, một nữ sinh trung học, khao khát được sống cuộc sống của một cậu bé ở thành phố Tokyo
+                nhộn nhịp...</p>
         </div>
     </div>
-    <div class="container movie-section" >
+    <div class="container movie-section">
         <div class="row mb-5">
             <div class="col mb-1">
                 <div id="phimmoithem" class="d-flex justify-content-between" style="padding-top: 20px">
@@ -123,14 +124,21 @@
                                data-bs-toggle="tooltip" title="{{ $data->ten }}">
                                 <img src="{{$data->anh}}" alt="" class="img-fluid" width="200px">
                                 @if($data->gia >= 1)
-                                    <span class="badge bg-danger rounded-pill position-absolute top-0 end-0">
+                                    <span class="badge bg-danger rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
                                     </span>
                                 @elseif($data->is_vip == true)
-                                    <span class="badge bg-warning rounded-pill position-absolute top-0 end-0">
+                                    <span class="badge bg-warning rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                                 @endif
+                                <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                    @if($data->trang_thai == 'Full')
+                                        Full
+                                        @else
+                                        Đang chiếu
+                                    @endif
+                                </span>
                             </a>
                         </div>
                     @endforeach
@@ -150,14 +158,21 @@
                                data-bs-toggle="tooltip" title="{{ $data->ten }}">
                                 <img src="{{$data->anh}}" alt="" class="img-fluid" width="200px">
                                 @if($data->gia >= 1)
-                                    <span class="badge bg-danger rounded-pill position-absolute top-0 end-0">
+                                    <span class="badge bg-danger rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
                                     </span>
-                                    @elseif($data->is_vip == true)
-                                    <span class="badge bg-warning rounded-pill position-absolute top-0 end-0">
+                                @elseif($data->is_vip == true)
+                                    <span class="badge bg-warning rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                                 @endif
+                                <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                    @if($data->trang_thai == 'Full')
+                                        Full
+                                    @else
+                                        Đang chiếu
+                                    @endif
+                                </span>
                             </a>
                         </div>
                     @endforeach
@@ -177,14 +192,21 @@
                                data-bs-toggle="tooltip" title="{{ $data->ten }}">
                                 <img src="{{$data->anh}}" alt="" class="img-fluid" width="200px">
                                 @if($data->gia >= 1)
-                                    <span class="badge bg-danger rounded-pill position-absolute top-0 end-0">
+                                    <span class="badge bg-danger rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
                                     </span>
                                 @elseif($data->is_vip == true)
-                                    <span class="badge bg-warning rounded-pill position-absolute top-0 end-0">
+                                    <span class="badge bg-warning rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                                 @endif
+                                <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                    @if($data->trang_thai == 'Full')
+                                        Full
+                                    @else
+                                        Đang chiếu
+                                    @endif
+                                </span>
                             </a>
                         </div>
                     @endforeach
@@ -204,14 +226,21 @@
                                data-bs-toggle="tooltip" title="{{ $data->ten }}">
                                 <img src="{{$data->anh}}" alt="" class="img-fluid" width="200px">
                                 @if($data->gia >= 1)
-                                    <span class="badge bg-danger rounded-pill position-absolute top-0 end-0">
+                                    <span class="badge bg-danger rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
                                     </span>
                                 @elseif($data->is_vip == true)
-                                    <span class="badge bg-warning rounded-pill position-absolute top-0 end-0">
+                                    <span class="badge bg-warning rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                                 @endif
+                                <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                    @if($data->trang_thai == 'Full')
+                                        Full
+                                    @else
+                                        Đang chiếu
+                                    @endif
+                                </span>
                             </a>
                         </div>
                     @endforeach

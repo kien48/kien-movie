@@ -64,12 +64,18 @@
                         <a href="/detail/@{{ item.slug }}" class="nav-link position-relative" data-bs-toggle="tooltip"
                            title="@{{ item.ten }}">
                             <img src="@{{item.anh}}" alt="" class="img-fluid" width="200px">
-                                <span ng-show="item.gia >=1" class="badge bg-danger rounded-pill position-absolute top-0 end-0">
+                                <span ng-show="item.gia >=1" class="badge bg-danger rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
                                     </span>
-                                <span ng-show="item.is_vip == true" class="badge bg-warning rounded-pill position-absolute top-0 end-0">
+                                <span ng-show="item.is_vip == true" class="badge bg-warning rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
+                            <span ng-show="item.trang_thai == 'Full'" class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                 Full
+                                </span>
+                            <span ng-show="item.trang_thai == 'Đang cập nhật'" class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                 Đang chiếu
+                                </span>
                         </a>
                     </div>
                 </div>

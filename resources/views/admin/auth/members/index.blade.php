@@ -17,14 +17,13 @@
         </thead>
 
         <tbody>
-        @foreach($data as $user)
+        @foreach($data as $admin)
             <tr>
-                <td>{{$user->id}}</td>
-                <td>{{$user->name}}</td>
-                <td>{{$user->email}}</td>
+                <td>{{$admin->id}}</td>
+                <td>{{$admin->name}}</td>
+                <td>{{$admin->email}}</td>
                 <td class="text-nowrap" style="width: 1px;">
                     <a href="http://" class="btn btn-outline-info">Xem</a>
-                    <a href="http://" class="btn btn-outline-warning">Sửa</a>
                     <a href="http://" class="btn btn-outline-danger">Khóa</a>
                 </td>
             </tr>
@@ -49,6 +48,7 @@
             new DataTable('#example', {
                 order: [[0, 'desc']]
             });
+        </script>
     @endsection
     @section('css')
         <!--datatable css-->

@@ -1,6 +1,6 @@
 @extends('admin.layouts.master');
 @section('title')
-    Danh sách tài khoản người dùng
+    Danh sách tài khoản Admin
 @endsection
 @section('content')
     <div class="d-flex justify-content-between mt-3 mb-3">

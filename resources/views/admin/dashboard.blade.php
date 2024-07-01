@@ -8,7 +8,6 @@
             -webkit-animation: slide-in-elliptic-top-fwd 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
             animation: slide-in-elliptic-top-fwd 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
         }
-
         @-webkit-keyframes slide-in-elliptic-top-fwd {
             0% {
                 -webkit-transform: translateY(-600px) rotateX(-30deg) scale(0);
@@ -46,6 +45,7 @@
         .dashboard-card {
             border-radius: 10px;
             color: white;
+            margin: 10px;
         }
 
         .dashboard-card h3 {
@@ -86,50 +86,44 @@
 @section('content')
     <div class="container dashboard-container">
         <div class="row slide-in-elliptic-top-fwd">
-            <div class="col-3 bg-danger d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
+            <div class="col-2 bg-danger d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
                 <h3 class="text-center">Tổng số phim: {{$tongPhim}}</h3>
             </div>
-            <div class="col-3 bg-warning d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
-                <h3 class="text-center">Phim mới trong tháng: {{$phimMoiTuan}}</h3>
+            <div class="col-2 bg-warning d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
+                <h3 class="text-center">Phim mới trong tuần: {{$phimMoiTuan}}</h3>
             </div>
-            <div class="col-3 bg-success d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
+            <div class="col-2 bg-success d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
                 <h3 class="text-center">Tổng số lượt xem: {{$tongLuotXem}}</h3>
             </div>
-            <div class="col-3 bg-primary d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
+            <div class="col-2 bg-primary d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
                 <h3 class="text-center">Người dùng mới trong tuần: {{$thanhVienDangKyTuanNay}}</h3>
             </div>
-            <div class="col-3 bg-secondary d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
+            <div class="col-2 bg-secondary d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
                 <h3 class="text-center">Admin mới trong tuần: {{$adminDangKyTuanNay}}</h3>
             </div>
-            <div class="col-3 bg-info d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
+            <div class="col-2 bg-info d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
                 <h3 class="text-center">Tổng số bình luận: {{$tongBinhLuan}}</h3>
             </div>
-        </div>
-
-        <div class="row chart-container">
-            <div class="col-6">
-                <canvas id="viewChart"></canvas>
-            </div>
-            <div class="col-6">
-                <canvas id="userChart"></canvas>
+            <div class="col-2 bg-dark  d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
+                <h3 class="text-center">Tổng danh thu: {{number_format($tongDanhThu)}}đ</h3>
             </div>
         </div>
 
-        <div class="row recent-activities">
+        <div class="row recent-activities slide-in-elliptic-top-fwd">
             <div class="col-6">
                 <h4>Phim mới thêm</h4>
                 <ul>
-                    <li>Phim A - Thêm vào ngày 01/06/2024</li>
-                    <li>Phim B - Thêm vào ngày 02/06/2024</li>
-                    <li>Phim C - Thêm vào ngày 03/06/2024</li>
+                    @foreach($phimMoiThem as $phim)
+                        <li>{{$phim->ten}} - Thêm vào ngày {{$phim->created_at}}</li>
+                    @endforeach
                 </ul>
             </div>
             <div class="col-6">
                 <h4>Người dùng mới đăng ký</h4>
                 <ul>
-                    <li>Người dùng A - Đăng ký ngày 01/06/2024</li>
-                    <li>Người dùng B - Đăng ký ngày 02/06/2024</li>
-                    <li>Người dùng C - Đăng ký ngày 03/06/2024</li>
+                    @foreach($nguoiDungMoiDangKy as $user)
+                        <li>{{$user->name}} - Thêm vào ngày {{$user->created_at}}</li>
+                    @endforeach
                 </ul>
             </div>
         </div>
@@ -138,9 +132,9 @@
             <div class="col-6">
                 <h4>Bình luận mới nhất</h4>
                 <ul>
-                    <li>Người dùng A: "Bình luận A" - Phim A - 01/06/2024</li>
-                    <li>Người dùng B: "Bình luận B" - Phim B - 02/06/2024</li>
-                    <li>Người dùng C: "Bình luận C" - Phim C - 03/06/2024</li>
+                    @foreach($binhLuanMoiNhat as $bl)
+                        <li>{{$bl->user->name}}: {{$bl->content}} - Thêm vào ngày {{$bl->created_at}}</li>
+                    @endforeach
                 </ul>
             </div>
             <div class="col-6">
@@ -155,52 +149,5 @@
     </div>
 @endsection
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Biểu đồ lượt xem phim
-        var ctx = document.getElementById('viewChart').getContext('2d');
-        var viewChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Lượt xem phim',
-                    data: [1200, 1900, 3000, 5000, 2000, 3000],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
 
-        // Biểu đồ người dùng mới đăng ký
-        var ctx2 = document.getElementById('userChart').getContext('2d');
-        var userChart = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Người dùng mới đăng ký',
-                    data: [500, 700, 800, 1200, 900, 1400],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
 @endsection

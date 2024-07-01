@@ -17,14 +17,21 @@
                            data-bs-toggle="tooltip" title="{{ $data->ten }}">
                             <img src="{{$data->anh}}" alt="" class="img-fluid" width="200px">
                             @if($data->gia >= 1)
-                                <span class="badge bg-danger rounded-pill position-absolute top-0 end-0">
+                                <span class="badge bg-danger rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
                                     </span>
                             @elseif($data->is_vip == true)
-                                <span class="badge bg-warning rounded-pill position-absolute top-0 end-0">
+                                <span class="badge bg-warning rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                             @endif
+                            <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                    @if($data->trang_thai == 'Full')
+                                    Full
+                                @else
+                                    Đang chiếu
+                                @endif
+                                </span>
                         </a>
                     </div>
                 @endforeach

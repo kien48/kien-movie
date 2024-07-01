@@ -81,31 +81,39 @@ Route::prefix('api')->group(function (){
 
 });
 
-    Route::prefix('admin')
-        ->as('admin.')
-        ->group(function () {
-            Route::prefix('movies')
-                ->as('movies.')
-                ->group(function () {
-                    Route::get('/', [\App\Http\Controllers\Admin\MovieController::class, 'index'])->name('index');
-                    Route::get('create', [\App\Http\Controllers\Admin\MovieController::class, 'create'])->name('create');
-                    Route::post('store', [\App\Http\Controllers\Admin\MovieController::class, 'store'])->name('store');
-                    Route::get('{slug}/show', [\App\Http\Controllers\Admin\MovieController::class, 'show'])->name('show');
-                    Route::get('{slug}/edit', [\App\Http\Controllers\Admin\MovieController::class, 'edit'])->name('edit');
-                    Route::put('{slug}/update', [\App\Http\Controllers\Admin\MovieController::class, 'update'])->name('update');
+Route::get('/admin/login',[AdminUserController::class,'showFormLogin'])->name('admin.login');
+Route::post('/admin/login',[AdminUserController::class,'login'])->name('admin.login');
 
-                });
+   Route::middleware('admin')->group(function (){
+       Route::prefix('admin')
+           ->as('admin.')
+           ->group(function () {
+               Route::prefix('movies')
+                   ->as('movies.')
+                   ->group(function () {
+                       Route::get('/', [\App\Http\Controllers\Admin\MovieController::class, 'index'])->name('index');
+                       Route::get('create', [\App\Http\Controllers\Admin\MovieController::class, 'create'])->name('create');
+                       Route::post('store', [\App\Http\Controllers\Admin\MovieController::class, 'store'])->name('store');
+                       Route::get('{slug}/show', [\App\Http\Controllers\Admin\MovieController::class, 'show'])->name('show');
+                       Route::get('{slug}/edit', [\App\Http\Controllers\Admin\MovieController::class, 'edit'])->name('edit');
+                       Route::put('{slug}/update', [\App\Http\Controllers\Admin\MovieController::class, 'update'])->name('update');
 
-            Route::resource('catelogues', CatelogueController::class);
-            Route::resource('members', MemberUserController::class);
-            Route::resource('admins', AdminUserController::class);
-            Route::resource('payments', PaymentController::class);
-            Route::resource('bills', BillController::class);
-            Route::resource('catelogue-posts', CateloguePostController::class);
-            Route::resource('posts', PostController ::class);
-            Route::resource('tagposts', TagPostController ::class);
-            Route::get('/',[\App\Http\Controllers\Admin\DashBoardController::class,'index'])->name('home');
+                   });
 
-        });
+               Route::resource('catelogues', CatelogueController::class);
+               Route::get('/catelogue/thong-ke',[\App\Http\Controllers\Admin\CatelogueController::class,'thongKe'])->name('catelogue.thongKe');
+
+               Route::resource('members', MemberUserController::class);
+               Route::resource('admins', AdminUserController::class);
+               Route::resource('payments', PaymentController::class);
+               Route::resource('bills', BillController::class);
+               Route::resource('catelogue-posts', CateloguePostController::class);
+               Route::resource('posts', PostController ::class);
+               Route::resource('tagposts', TagPostController ::class);
+               Route::get('/',[\App\Http\Controllers\Admin\DashBoardController::class,'index'])->name('home');
+               Route::get('/admin/logout',[AdminUserController::class,'logout'])->name('logout');
+
+           });
+   });
 
 

@@ -5,7 +5,10 @@
 @section('content')
     <div class="d-flex justify-content-between mt-3 mb-3">
         <h1 class="text-center h3">Danh sách thể loại</h1>
-        <a href="{{route('admin.catelogues.create')}}" class="btn btn-primary">Thêm mới</a>
+        <div>
+            <a href="{{route('admin.catelogue.thongKe')}}" class="btn btn-info">Thống kê</a>
+            <a href="{{route('admin.catelogues.create')}}" class="btn btn-primary">Thêm mới</a>
+        </div>
     </div>
     @if(session('error'))
             <li>{{session('error')}}</li>

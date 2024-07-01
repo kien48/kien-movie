@@ -64,4 +64,26 @@ class AdminUserController extends Controller
     {
         //
     }
+
+    public function showFormLogin()
+    {
+        return view('admin.auth.login');
+    }
+    public function login(Request $request)
+    {
+        $data = $request->all();
+        $user = User::query()->where('email',$data['email'])->where('role','admin')->first();
+        if($user == null){
+           return back()->with('error', 'Bạn không có quyền truy cập');
+        }else{
+            $usersuccsess = User::query()->where('email',$data['email'])->first();
+            session(['admin' => $usersuccsess]);
+            return redirect()->route('admin.home');
+        }
+    }
+    public function logout()
+    {
+        session()->forget('admin');
+        return redirect()->route('admin.login');
+    }
 }

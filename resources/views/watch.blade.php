@@ -40,6 +40,11 @@
                     <h5 class="font-monospace text-light-emphasis">Đạo diễn:</h5>
                     <h5> {{$model['dao_dien']}} </h5>
                 </div>
+                <div class="d-flex mt-3">
+                    <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
+                        Báo lỗi
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -115,6 +120,16 @@
 
     </div>
 
+    <div class="offcanvas offcanvas-end" id="demo">
+        <div class="offcanvas-header">
+            <h1 class="offcanvas-title">Báo lỗi phim "{{$model['ten']}}"</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <input type="text" class="form-control" placeholder="Điền trường hợp phim bị lỗi để chúng tôi xử lý">
+            <button class="btn btn-secondary" type="button">Gửi</button>
+        </div>
+    </div>
     @section('js')
         <script>
             viewFunction = function ($scope, $http, $sce, $interval) {
@@ -158,7 +173,7 @@
                     })
                 }
                 $scope.getLuotXem();
-                setInterval($scope.getLuotXem, 5000)
+                setInterval($scope.getLuotXem, 10000)
                 $scope.themLuotXem = ()=>{
                     $http.post('{{route('themLuotXemPhim')}}',{
                         movie_id : {{$model['id']}},
@@ -167,7 +182,7 @@
                         $scope.getLuotXem();
                     })
                 }
-                var minThoiGian = 20;
+                var minThoiGian = 60;
                 var demNguoc = setInterval(function (){
                     minThoiGian--;
                     if(minThoiGian <= 0){

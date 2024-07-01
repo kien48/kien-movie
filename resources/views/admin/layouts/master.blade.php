@@ -12,6 +12,7 @@
     <link href="{{asset('/')}}/themes/web phim/public/styleadmin.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{asset('/')}}/themes/web phim/public/angular.js"></script>
+    <script src="{{asset('/')}}/themes/web phim/public/font-fontawesome-ae333ffef2.js"></script>
     @yield('css')
 </head>
 
@@ -19,9 +20,20 @@
 <nav class="navbar navbar-expand-lg navbar-dark" style="margin-top: -10px">
     <div class="container-fluid header">
         <a class="navbar-brand" href="#">KienMovie</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="d-flex">
+            <a href="" class="text-white nav-link"><i class="h3 fa-solid fa-bell"></i>
+                <span class="badge rounded-pill bg-warning " style="margin-left: -10px">5</span>
+            </a>
+            <div class="dropdown ms-3">
+                <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
+                    Admin {{session('admin')->name}}
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Thông tin tài khoản</a></li>
+                    <li><a class="dropdown-item" href="{{route('admin.logout')}}">Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 </nav>
 

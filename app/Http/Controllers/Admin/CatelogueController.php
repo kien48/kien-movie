@@ -110,4 +110,15 @@ class CatelogueController extends Controller
             return back()->with('error','Có phim đang liên kết với thể loại này không thể xóa');
         }
     }
+
+    public function thongKe()
+    {
+        $genreCounts = DB::table('movie_catelogue')
+            ->select('movie_id','');
+
+        $labels = $genreCounts->pluck('genre')->toArray();
+        $data = $genreCounts->pluck('total')->toArray();
+        dd($labels, $data);
+        return view(self::PATH_VIEW."thongke", compact('labels', 'data'));
+    }
 }
