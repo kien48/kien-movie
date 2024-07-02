@@ -83,7 +83,10 @@ Route::prefix('api')->group(function (){
     Route::get('/luot-xem-bai-viet/{id}', [\App\Http\Controllers\PostController::class, 'apiLuotXemBaiViet']);
     Route::get('/luot-xem-tap-phim/{id}/{tap}', [\App\Http\Controllers\MovieController::class, 'apiTapPhim']);
     Route::get('/dem-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDemThongBaoLoiChuaFix']);
+<<<<<<< HEAD
     Route::get('/danh-sach-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDanhSachBaoLoi']);
+=======
+>>>>>>> d2f0dcd2c6396b166729b6b65ace749cc252128c
 
 });
 

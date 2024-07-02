@@ -124,6 +124,7 @@
 </footer>
 
 <script>
+<<<<<<< HEAD
     document.addEventListener("DOMContentLoaded", function() {
         var loader = document.getElementById("loading-screen");
         window.addEventListener("load", function() {
@@ -143,10 +144,16 @@
     var viewFunction = function($scope) {
 
     }
+=======
+    var myApp = angular.module('myApp', []);
+    myApp.controller('myCtrl', function($http, $scope) {});
+
+    var viewFunction = function($scope) {};
+>>>>>>> d2f0dcd2c6396b166729b6b65ace749cc252128c
 </script>
 @yield('js')
 <script>
-    myApp.controller('viewCtrl', viewFunction)
+    myApp.controller('viewCtrl', viewFunction);
 </script>
 
 </body>
