@@ -66,6 +66,9 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'admin'=>\App\Http\Middleware\CheckUserRole::class
+        'admin'=>\App\Http\Middleware\CheckUserRole::class,
+        'checkActiveMember'=>\App\Http\Middleware\CheckActiveUser::class,
+        'checkSpamMember'=>\App\Http\Middleware\CheckSpamUser::class,
+        'CongTienBaoLoi'=>\App\Http\Middleware\CongTienBaoLoi::class,
     ];
 }

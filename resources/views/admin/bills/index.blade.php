@@ -8,7 +8,9 @@
         <thead>
         <tr>
             <th>ID</th>
+            <th>ID Người dùng</th>
             <th>Người dùng</th>
+            <th>ID Phim</th>
             <th>Phim</th>
             <th>Xu</th>
             <th>Thời gian</th>
@@ -20,7 +22,9 @@
             <tr>
                 <td>{{$bill->id}}</td>
                 <td>{{$bill->user_id}}</td>
+                <td>{{$bill->user->name}}</td>
                 <td>{{$bill->movie_id}}</td>
+                <td>{{$bill->movie->ten}}</td>
                 <td>{{number_format($bill->xu)}} xu</td>
                 <td>{{$bill->created_at}}</td>
             </tr>

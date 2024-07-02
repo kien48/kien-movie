@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::middleware(['checkActiveMember','checkSpamMember','CongTienBaoLoi'])->group(function (){
     Route::get('/', [App\Http\Controllers\PageController::class, 'index'])->name('home');
     Route::get('/detail/{slug}', [App\Http\Controllers\PageController::class, 'detail'])->name('detail');
     Route::get('/watch/{slug}/{tap}', [App\Http\Controllers\PageController::class, 'watch'])->name('watch');
@@ -55,7 +56,9 @@ use Illuminate\Support\Facades\Route;
     Auth::routes();
     Route::post('/them-luot-xem-phim', [App\Http\Controllers\MovieController::class, 'store'])->name('themLuotXemPhim');
 
-Route::middleware('auth')->group(function () {
+});
+
+Route::middleware(['auth','checkActiveMember','checkSpamMember','CongTienBaoLoi'])->group(function () {
     Route::get('/nap-xu', [App\Http\Controllers\UserCoinController::class, 'napXu'])->name('napXu');
     Route::get('/lich-su-giao-dich', [App\Http\Controllers\Auth\HomeController::class, 'transactions'])->name('transactions');
     Route::post('/mua-phim', [App\Http\Controllers\UserCoinController::class, 'muaPhim'])->name('muaPhim');
@@ -63,6 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/phim-da-mua', [HomeController::class, 'purchasedMovies'])->name('purchasedMovies');
     Route::get('/cap-nhat-tai-khoan', [App\Http\Controllers\Auth\EditController::class, 'edit'])->name('capnhattk');
     Route::post('/cap-nhat-tai-khoan', [App\Http\Controllers\Auth\EditController::class, 'update'])->name('updatetk');
+    Route::post('/bao-loi', [App\Http\Controllers\NotificationController::class, 'store'])->name('baoLoi');
 
 });
 
@@ -78,6 +82,8 @@ Route::prefix('api')->group(function (){
     Route::get('/mua-phim-status/{slug}', [\App\Http\Controllers\PageController::class, 'apiTrangThaiMuaPhim']);
     Route::get('/luot-xem-bai-viet/{id}', [\App\Http\Controllers\PostController::class, 'apiLuotXemBaiViet']);
     Route::get('/luot-xem-tap-phim/{id}/{tap}', [\App\Http\Controllers\MovieController::class, 'apiTapPhim']);
+    Route::get('/dem-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDemThongBaoLoiChuaFix']);
+    Route::get('/danh-sach-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDanhSachBaoLoi']);
 
 });
 
@@ -111,7 +117,12 @@ Route::post('/admin/login',[AdminUserController::class,'login'])->name('admin.lo
                Route::resource('posts', PostController ::class);
                Route::resource('tagposts', TagPostController ::class);
                Route::get('/',[\App\Http\Controllers\Admin\DashBoardController::class,'index'])->name('home');
-               Route::get('/admin/logout',[AdminUserController::class,'logout'])->name('logout');
+               Route::get('/logout',[AdminUserController::class,'logout'])->name('logout');
+               Route::get('lich-xu-giao-dich/{id}',[MemberUserController::class,'transactions'])->name('lich-xu-giao-dich');
+               Route::get('khoa-tai-khoan-member/{id}',[MemberUserController::class,'khoaTaiKhoan'])->name('khoa-tai-khoan-member');
+               Route::get('mo-tai-khoan-member/{id}',[MemberUserController::class,'moKhoaTaiKhoan'])->name('mo-tai-khoan-member');
+               Route::get('loi-chua-fix',[\App\Http\Controllers\Admin\NotificationController::class,'index'])->name('loi-chua-fix');
+               Route::post('fix-loi',[\App\Http\Controllers\Admin\NotificationController::class,'store'])->name('fix-loi');
 
            });
    });

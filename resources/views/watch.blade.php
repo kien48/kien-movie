@@ -123,16 +123,16 @@
     <div class="offcanvas offcanvas-end" id="demo">
         <div class="offcanvas-header">
             <h1 class="offcanvas-title">Báo lỗi phim "{{$model['ten']}}"</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+            <button type="button" id="class" class="btn-close"  data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body">
-            <input type="text" class="form-control" placeholder="Điền trường hợp phim bị lỗi để chúng tôi xử lý">
-            <button class="btn btn-secondary" type="button">Gửi</button>
+            <input type="text" ng-model="noi_dung" class="form-control" placeholder="Điền trường hợp phim bị lỗi để chúng tôi xử lý">
+            <button class="btn btn-secondary" ng-click="baoLoi()" type="button">Gửi</button>
         </div>
     </div>
     @section('js')
         <script>
-            viewFunction = function ($scope, $http, $sce, $interval) {
+            viewFunction = function ($scope, $http) {
                 $scope.listComments = [];
                 $scope.content = ''
                 $scope.getComment = () => {
@@ -190,7 +190,18 @@
                         $scope.themLuotXem()
                     }
                 },1000)
-
+             $scope.baoLoi = ()=>{
+                 $http.post("{{route('baoLoi')}}",{
+                     user_id : {{Auth::user()->id}},
+                     movie_id : {{$model['id']}},
+                     tap : {{$episode['tap']}},
+                     noi_dung : $scope.noi_dung
+                 }).then(function (res){
+                     alert('Gửi thông báo lỗi thành công')
+                     document.querySelector('.btn-close').click()
+                     $scope.noi_dung= ''
+                 })
+             }
             };
 
 

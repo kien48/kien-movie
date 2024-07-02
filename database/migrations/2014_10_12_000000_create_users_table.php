@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['admins', 'members'])->default('members');
             $table->boolean('is_vip')->default(0);
+            $table->boolean('is_active')->default(0);
+            $table->boolean('is_spam')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

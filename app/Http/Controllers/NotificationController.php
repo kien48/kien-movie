@@ -1,22 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Payment_recharge;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 
-class PaymentController extends Controller
+class NotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    const PATH_VIEW = 'admin.payments.';
     public function index()
     {
         //
-        $data = Payment_recharge::query()->with('user')->latest('id')->get();
-        return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
     }
 
     /**
@@ -32,13 +28,14 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        Notification::query()->create($data);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Notification $notification)
     {
         //
     }
@@ -46,7 +43,7 @@ class PaymentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Notification $notification)
     {
         //
     }
@@ -54,7 +51,7 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Notification $notification)
     {
         //
     }
@@ -62,7 +59,7 @@ class PaymentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Notification $notification)
     {
         //
     }

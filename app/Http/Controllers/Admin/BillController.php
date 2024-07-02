@@ -15,7 +15,7 @@ class BillController extends Controller
     public function index()
     {
         //
-        $data = Bill::query()->latest('id')->get();
+        $data = Bill::query()->with(['user','movie'])->latest('id')->get();
         return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
     }
 

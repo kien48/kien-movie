@@ -6,25 +6,56 @@
     <div class="d-flex justify-content-between mt-3 mb-3">
         <h1 class="text-center h3">Danh sách tài khoản người dùng</h1>
     </div>
+    @if(session('error'))
+        <li class="text-danger">{{session('error')}}</li>
+    @endif
     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
         <thead>
         <tr>
             <th>ID</th>
             <th>Tên</th>
             <th>Email</th>
+            <th>Số xu còn lại</th>
+            <th>Loại tài khoản</th>
+            <th>Spam</th>
+            <th>Trạng thái khóa</th>
             <th>Thao tác</th>
         </tr>
         </thead>
 
         <tbody>
         @foreach($data as $admin)
-            <tr>
+            @php
+                $class = '';
+                $vip = "Thường";
+                if($admin->is_vip == 1){
+                    $class = 'table-warning';
+                    $vip = "Vip";
+                }
+                $status = 'Không';
+                if($admin->is_active == 1){
+                    $status = 'Đang bị khóa';
+                }
+                $spam = 'Không';
+                if($admin->is_spam == 1){
+                    $spam = 'Có';
+                }
+            @endphp
+            <tr class="{{$class}}">
                 <td>{{$admin->id}}</td>
                 <td>{{$admin->name}}</td>
                 <td>{{$admin->email}}</td>
+                <td>{{number_format($admin->coin[0]->coin)}} xu</td>
+                <td>{{$vip}}</td>
+                <td>{{$spam}}</td>
+                <td>{{$status}}</td>
                 <td class="text-nowrap" style="width: 1px;">
-                    <a href="http://" class="btn btn-outline-info">Xem</a>
-                    <a href="http://" class="btn btn-outline-danger">Khóa</a>
+                    <a href="{{route('admin.lich-xu-giao-dich',$admin->id)}}" class="btn btn-outline-info">Xem lịch sử giao dịch</a>
+                    @if($admin->is_active==0)
+                        <a href="{{route('admin.khoa-tai-khoan-member',$admin->id)}}" class="btn btn-outline-danger">Khóa</a>
+                        @else
+                    <a href="{{route('admin.mo-tai-khoan-member',$admin->id)}}" class="btn btn-outline-warning">Mở khóa</a>
+                    @endif
                 </td>
             </tr>
         @endforeach

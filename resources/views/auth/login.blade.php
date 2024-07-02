@@ -41,6 +41,9 @@
            <div class="col-md-4">
                <div class="login-container text-center">
                    <h2>Đăng nhập</h2>
+                   @if(session('message'))
+                       <li>{{session('message')}}</li>
+                   @endif
                    <form method="POST" action="{{ route('login') }}">
                        @csrf
                        <label for="email" class="col-md-4 col-form-label">{{ __('Email') }}</label>

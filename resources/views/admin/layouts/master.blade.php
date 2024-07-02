@@ -21,8 +21,8 @@
     <div class="container-fluid header">
         <a class="navbar-brand" href="#">KienMovie</a>
         <div class="d-flex">
-            <a href="" class="text-white nav-link"><i class="h3 fa-solid fa-bell"></i>
-                <span class="badge rounded-pill bg-warning " style="margin-left: -10px">5</span>
+            <a href="{{route('admin.loi-chua-fix')}}" class="text-white nav-link"><i class="h3 fa-solid fa-bell"></i>
+                <span class="badge rounded-pill bg-warning " style="margin-left: -10px">@{{ count }}</span>
             </a>
             <div class="dropdown ms-3">
                 <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
@@ -91,9 +91,17 @@
 <script>
     var myApp = angular.module('myApp',[])
     myApp.controller('myCtrl',function ($scope,$http){
-
+        $scope.count = 0;
+        $scope.loadLoi = ()=>{
+            $http.get('http://movie.test/api/dem-thong-bao-loi')
+                .then(function (res){
+                    $scope.count = res.data.data
+                })
+        }
+        $scope.loadLoi()
+        setInterval($scope.loadLoi,5000)
     })
-    var viewFunction = ($scope)=>{
+    var viewFunction = ($scope,$http)=>{
 
     }
 </script>

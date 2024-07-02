@@ -55,7 +55,7 @@ class PostController extends Controller
         }
 
         $dataPost = $request->except('tag');
-        $dataPost['user_id'] = Auth::user()->id;
+        $dataPost['user_id'] = session('admin')->id;
         $dataPost['slug'] = \Str::slug($dataPost['tieu_de']);
         $dataTag = $request->tag;
         try {

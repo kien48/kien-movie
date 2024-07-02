@@ -11,6 +11,7 @@
         <tr>
             <th>ID</th>
             <th>Số giao dịch</th>
+            <th>ID Người dùng</th>
             <th>Người dùng</th>
             <th>Xu</th>
             <th>Phương thức thanh toán</th>
@@ -33,6 +34,7 @@
                 <td>{{$payment->id}}</td>
                 <td>{{$payment->so_giao_dich}}</td>
                 <td>{{$payment->user_id}}</td>
+                <td>{{$payment->user->name}}</td>
                 <td>{{number_format($payment->xu)}} xu</td>
                 <td>{{$payment->phuong_thuc_thanh_toan}}</td>
                 <td>{{$payment->tinh_trang_thanh_toan}}</td>
