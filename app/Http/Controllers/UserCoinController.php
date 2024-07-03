@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bill;
+use App\Models\Fund;
+use App\Models\fundTransaction;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,24 +18,24 @@ class UserCoinController extends Controller
         $movie_id = $request->movie_id;
         $movie = Movie::query()->find($movie_id);
         $ten_movie = $movie->ten;
-        $coin = (int) $request->coin; // Đảm bảo rằng $coin là số nguyên
+        $coin = (int) $request->coin;
+        $coinBill = ($coin * 80 ) / 100;
+        $coinFund = $coin - $coinBill;
         $user = Auth::user();
         $user_coin = DB::table('user_coins')->where('user_id', $user->id)->value('coin');
+        $tongQuy = Fund::query()->select('tong_tien')->first();
 
         try {
             DB::beginTransaction();
-            // Kiểm tra số dư coin của người dùng
             if ($user->coin[0]['coin'] >= $coin) {
-                // Trừ số coin từ số dư của người dùng
                 $newCoin  = $user->coin[0]['coin'] - $coin;
                 DB::table('user_coins')->where('user_id', $user->id)->update(['coin' => $newCoin]);
 
-                // Thêm phim vào danh sách phim của người dùng mà không xoá các phim đã có
                 $user->movies()->syncWithoutDetaching([$movie_id]);
                 Bill::query()->create([
                     'user_id' => $user->id,
                     'movie_id' => $movie_id,
-                    'xu'=>$coin
+                    'xu'=>$coinBill
                 ]);
                 DB::table('transaction_histories')->insert([
                     'user_id' => $user->id,
@@ -43,10 +45,17 @@ class UserCoinController extends Controller
                     'mo_ta'=>'Mua phim: '.$ten_movie,
                     'ngay_tao'=>now()
                 ]);
+                fundTransaction::query()->create([
+                    'user_id' => $user->id,
+                    'bien_dong_so_du' => "+".$coinFund,
+                    'mo_ta'=>'Nạp quỹ khi mua phim '.$ten_movie,
+                    'truoc_giao_dich'=>$tongQuy->tong_tien,
+                    'sau_giao_dich'=>$tongQuy->tong_tien + $coinFund,
+                ]);
+                Fund::query()->increment('tong_tien', $coinFund);
                 DB::commit();
                 return redirect()->back()->with('success', 'Đã mua phim thành công');
             } else {
-                // Nếu số dư coin không đủ, rollback giao dịch
                 DB::rollBack();
                 return redirect()->back()->withErrors(['error' => 'Số dư coin không đủ']);
             }

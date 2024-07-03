@@ -66,7 +66,7 @@
         </form>
     </div>
     @section('js')
-        <script src="https:////cdn.ckeditor.com/4.8.0/basic/ckeditor.js"></script>
+        <script src="https://cdn.ckeditor.com/4.8.0/full-all/ckeditor.js"></script>
         <script>
             CKEDITOR.replace( 'noi_dung' );
         </script>

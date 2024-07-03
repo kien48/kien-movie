@@ -21,16 +21,12 @@
     <div class="container-fluid header">
         <a class="navbar-brand" href="#">KienMovie</a>
         <div class="d-flex">
-<<<<<<< HEAD
             <a href="{{route('admin.loi-chua-fix')}}" class="text-white nav-link"><i class="h3 fa-solid fa-bell"></i>
-=======
-            <a href="" class="text-white nav-link"><i class="h3 fa-solid fa-bell"></i>
->>>>>>> d2f0dcd2c6396b166729b6b65ace749cc252128c
                 <span class="badge rounded-pill bg-warning " style="margin-left: -10px">@{{ count }}</span>
             </a>
             <div class="dropdown ms-3">
                 <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
-                    Admin {{session('admin')->name}}
+                    {{session('admin')->name}}
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#">Thông tin tài khoản</a></li>

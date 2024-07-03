@@ -20,8 +20,11 @@ class MovieController extends Controller
     const PATH_VIEW = "admin.movies.";
     public function index()
     {
-        $data = Movie::query()->orderByDesc('id')->get();
-        return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
+        $countPhimDangCapNhat = Movie::query()->where('trang_thai','Đang cập nhật')->count();
+        $countPhimFull = Movie::query()->where('trang_thai','Full')->count();
+
+        $data = Movie::query()->with('lists')->orderByDesc('id')->get();
+        return view(self::PATH_VIEW.__FUNCTION__,compact('data','countPhimDangCapNhat','countPhimFull'));
     }
 
     public function create()
@@ -57,16 +60,17 @@ class MovieController extends Controller
         }
 
 
-        // Lấy dữ liệu phim, ngoại trừ các trường 'catelogue_id' và 'tap_phim'
         $dataMovie = $request->except('catelogue_id', 'tap_phim');
-        $dataMovie['slug'] = Str::slug($dataMovie['ten']); // Thêm \Illuminate\Support\ để sử dụng Str
+        $dataMovie['slug'] = Str::slug($dataMovie['ten']);
         $dataMovie['is_vip'] = isset($request->is_vip) ? 1 : 0;
-        // Lấy dữ liệu tập phim
-        $dataTapPhimTmp = $request->tap_phim;
+        $dataTapPhimTmp = [];
+        if($request->tap_phim != null){
+            $dataTapPhimTmp = $request->tap_phim;
+        }
         $dataTapPhim = [];
         foreach ($dataTapPhimTmp as $key => $value) {
             $dataTapPhim[] = [
-                'so' => $value['so'], // Chuyển đổi 'tap' thành 'so' để khớp với các trường trong yêu cầu
+                'so' => $value['so'],
                 'link' => $value['link']
             ];
         }
@@ -76,10 +80,8 @@ class MovieController extends Controller
             $dataMovie['trang_thai'] = "Đang cập nhật";
         }
         try {
-            // Bắt đầu transaction
             DB::beginTransaction();
 
-            // Tạo phim mới
             $movie = Movie::query()->create($dataMovie);
 
             // Tạo các tập phim mới liên kết với phim vừa tạo
@@ -91,17 +93,14 @@ class MovieController extends Controller
                 ]);
             }
 
-            // Đồng bộ hóa danh mục phim
             $movie->catelogue()->sync($request->catelogue_id);
 
-            // Commit transaction
             DB::commit();
-            return back()->with('success','Thêm sản phẩm thành công');
+            return back()->with('success','Thêm phim thành công');
 
         } catch (\Exception $exception) {
-            // Rollback transaction nếu có lỗi
             DB::rollBack();
-            return back()->with('error','Xóa lỗi');
+            return back()->with('error','Thêm lỗi');
         }
     }
 
@@ -184,10 +183,8 @@ class MovieController extends Controller
                 'trang_thai' => (count($request->input('tap_phim')) -1) == $request->input('so_tap') ? 'Full' : 'Đang cập nhật',
             ]);
 
-            // Cập nhật hoặc tạo mới các tập phim
             $tapPhimData = [];
             foreach ($request->input('tap_phim') as $tap) {
-                // Đảm bảo link không null trước khi thêm vào tapPhimData
                 if (!empty($tap['link'])) {
                     $tapPhimData[] = [
                         'tap' => $tap['so'],
@@ -196,9 +193,7 @@ class MovieController extends Controller
                     ];
                 }
             }
-            // Xóa các tập phim hiện có liên quan đến phim này
             Episode::where('movie_id', $movie->id)->delete();
-            // Thêm các tập phim mới vào
             Episode::insert($tapPhimData);
 
             $movie->catelogue()->sync($request->input('catelogue_id'));
@@ -212,8 +207,6 @@ class MovieController extends Controller
             return back()->withErrors(['error' => $exception->getMessage()]);
         }
     }
-
-
 
 
 }

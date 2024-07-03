@@ -40,11 +40,13 @@
                     <h5 class="font-monospace text-light-emphasis">Đạo diễn:</h5>
                     <h5> {{$model['dao_dien']}} </h5>
                 </div>
-                <div class="d-flex mt-3">
-                    <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
-                        Báo lỗi
-                    </button>
-                </div>
+                @if(Auth::check())
+                    <div class="d-flex mt-3">
+                        <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
+                            Báo lỗi
+                        </button>
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -82,24 +84,28 @@
             <div class="row mt-5">
                 <h3>Bình luận:</h3>
                 <div class="col-4 form-container">
-                    <form action="" method="post">
-                        <div class="d-flex flex-column">
+                    @if(Auth::check())
+                        <form action="" method="post">
+                            <div class="d-flex flex-column">
                             <textarea name="content" id="comment" class="form-control1"
                                       placeholder="Nhập bình luận..." ng-model="content"></textarea>
-                            <div class="rating-container mt-2">
-                                <label for="rating">Đánh giá sao:</label>
-                                <select name="rating" id="rating" class="form-control" ng-model="sao">
-                                    <option value="" selected>Đánh giá sao</option>
-                                    <option value="1">1 sao</option>
-                                    <option value="2">2 sao</option>
-                                    <option value="3">3 sao</option>
-                                    <option value="4">4 sao</option>
-                                    <option value="5">5 sao</option>
-                                </select>
+                                <div class="rating-container mt-2">
+                                    <label for="rating">Đánh giá sao:</label>
+                                    <select name="rating" id="rating" class="form-control" ng-model="sao">
+                                        <option value="" selected>Đánh giá sao</option>
+                                        <option value="1">1 sao</option>
+                                        <option value="2">2 sao</option>
+                                        <option value="3">3 sao</option>
+                                        <option value="4">4 sao</option>
+                                        <option value="5">5 sao</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-outline-danger mt-2" ng-click="send()">Gửi</button>
                             </div>
-                            <button type="button" class="btn btn-outline-danger mt-2" ng-click="send()">Gửi</button>
-                        </div>
-                    </form>
+                        </form>
+                        @else
+                        <a href="{{route('login')}}"><h3 class="text-dark">Đăng nhập để bình luận</h3></a>
+                        @endif
                 </div>
                 <div class="col-8">
                     <div class="comment-container text-black" ng-repeat="data in listComments">
@@ -192,7 +198,6 @@
                 },1000)
              $scope.baoLoi = ()=>{
                  $http.post("{{route('baoLoi')}}",{
-                     user_id : {{Auth::user()->id}},
                      movie_id : {{$model['id']}},
                      tap : {{$episode['tap']}},
                      noi_dung : $scope.noi_dung

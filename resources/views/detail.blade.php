@@ -170,23 +170,32 @@
                     <h2>Bạn có thể sẽ thích</h2>
                 </div>
                 <div class="row">
-                    @foreach($phimLienQuan as $item)
+                    @foreach($phimLienQuan as $data)
                         <div class="col-6 col-sm-4 col-md-3 col-lg-2 movie-card mb-3 mt-3">
-                            <a href="{{ route('detail', $item['slug']) }}" class="nav-link position-relative"
-                               data-bs-toggle="tooltip" title="{{ $item['ten'] }}">
-                                <img src="{{$item['anh']}}" alt="" class="img-fluid" width="200px">
-                                @if($item['gia'] >= 1)
+                            <a href="{{ route('detail', $data->slug) }}" class="nav-link position-relative"
+                               data-bs-toggle="tooltip" title="{{ $data->ten }}">
+                                <img src="{{$data->anh}}" alt="" class="img-fluid" width="200px">
+                                @if($data->gia >= 1)
                                     <span class="badge bg-danger rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Có phí
                                     </span>
-                                @elseif($item['is_vip'] == true)
+                                @elseif($data->is_vip == true)
                                     <span class="badge bg-warning rounded-0 position-absolute top-0 end-0">
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                                 @endif
-                                <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
-                                    @if($item['trang_thai'] == 'Full')
+                                @if($data->trang_thai == 'Full')
+                                    @php $class= "danger" @endphp
+                                @elseif($data->lists->ten =="Phim sắp chiếu")
+                                    @php $class= "info" @endphp
+                                @else
+                                    @php $class= "success" @endphp
+                                @endif
+                                <span class="badge bg-{{$class}} rounded-0 position-absolute bottom-0 start-0">
+                                    @if($data->trang_thai == 'Full')
                                         Full
+                                    @elseif($data->lists->ten =="Phim sắp chiếu")
+                                        Phim sắp chiếu
                                     @else
                                         Đang chiếu
                                     @endif
@@ -221,6 +230,7 @@
                             <h5 class="mb-3">Tổng xu còn
                                 lại: {{ isset($dataUser['coin'][0]['coin']) ? number_format($dataUser['coin'][0]['coin'] - $model['gia']) : 0 }}
                                 xu</h5>
+                        <h5>*20% xu sẽ được trích vào quỹ</h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" ng-click="muaPhim()" class="btn btn-primary">Xác nhận mua phim</button>

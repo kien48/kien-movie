@@ -5,7 +5,14 @@
 @section('content')
     <div class="d-flex justify-content-between mt-3 mb-3">
         <h1 class="text-center h3">Danh sách tài khoản Admin</h1>
+        <a href="{{route('admin.admins.create')}}" class="btn btn-danger">Thêm</a>
     </div>
+    @if(session('success'))
+        <li class="text-success">{{session('success')}}</li>
+    @endif
+    @if(session('error'))
+        <li class="text-danger">{{session('error')}}</li>
+    @endif
     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
         <thead>
         <tr>
@@ -23,9 +30,12 @@
                 <td>{{$admin->name}}</td>
                 <td>{{$admin->email}}</td>
                 <td class="text-nowrap" style="width: 1px;">
-                    <a href="http://" class="btn btn-outline-info">Xem</a>
-                    <a href="http://" class="btn btn-outline-warning">Sửa</a>
-                    <a href="http://" class="btn btn-outline-danger">Xóa</a>
+                    <a href="{{route('admin.admins.edit',$admin->id)}}" class="btn btn-outline-warning">Sửa</a>
+                    @if($admin->is_active==0)
+                        <a href="{{route('admin.khoa-tai-khoan',$admin->id)}}" class="btn btn-outline-danger">Khóa</a>
+                    @else
+                        <a href="{{route('admin.mo-tai-khoan',$admin->id)}}" class="btn btn-outline-warning">Mở khóa</a>
+                    @endif
                 </td>
             </tr>
         @endforeach

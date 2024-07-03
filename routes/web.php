@@ -52,6 +52,7 @@ Route::middleware(['checkActiveMember','checkSpamMember','CongTienBaoLoi'])->gro
     Route::get('/danh-muc-bai-viet/{id}/{slug}', [App\Http\Controllers\PostController::class, 'catelogue'])->name('danhMucBaiViet');
     Route::get('/tag-bai-viet/{id}/{slug}', [App\Http\Controllers\PostController::class, 'tag'])->name('tagBaiViet');
     Route::post('/them-luot-xem', [App\Http\Controllers\PostController::class, 'themLuotXem'])->name('themLuotXem');
+    Route::get('/quy-phat-trien', [App\Http\Controllers\PageController::class, 'fund'])->name('quy-phat-trien');
 
     Auth::routes();
     Route::post('/them-luot-xem-phim', [App\Http\Controllers\MovieController::class, 'store'])->name('themLuotXemPhim');
@@ -83,17 +84,16 @@ Route::prefix('api')->group(function (){
     Route::get('/luot-xem-bai-viet/{id}', [\App\Http\Controllers\PostController::class, 'apiLuotXemBaiViet']);
     Route::get('/luot-xem-tap-phim/{id}/{tap}', [\App\Http\Controllers\MovieController::class, 'apiTapPhim']);
     Route::get('/dem-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDemThongBaoLoiChuaFix']);
-<<<<<<< HEAD
     Route::get('/danh-sach-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDanhSachBaoLoi']);
-=======
->>>>>>> d2f0dcd2c6396b166729b6b65ace749cc252128c
+    Route::get('/danh-sach-thong-bao/{id}', [\App\Http\Controllers\AdminNotificationController::class, 'apiHienThiThongBaoTheoUser']);
+
 
 });
 
 Route::get('/admin/login',[AdminUserController::class,'showFormLogin'])->name('admin.login');
 Route::post('/admin/login',[AdminUserController::class,'login'])->name('admin.login');
 
-   Route::middleware('admin')->group(function (){
+   Route::middleware(['admin','CheckActiveAdmin'])->group(function (){
        Route::prefix('admin')
            ->as('admin.')
            ->group(function () {
@@ -122,8 +122,8 @@ Route::post('/admin/login',[AdminUserController::class,'login'])->name('admin.lo
                Route::get('/',[\App\Http\Controllers\Admin\DashBoardController::class,'index'])->name('home');
                Route::get('/logout',[AdminUserController::class,'logout'])->name('logout');
                Route::get('lich-xu-giao-dich/{id}',[MemberUserController::class,'transactions'])->name('lich-xu-giao-dich');
-               Route::get('khoa-tai-khoan-member/{id}',[MemberUserController::class,'khoaTaiKhoan'])->name('khoa-tai-khoan-member');
-               Route::get('mo-tai-khoan-member/{id}',[MemberUserController::class,'moKhoaTaiKhoan'])->name('mo-tai-khoan-member');
+               Route::get('khoa-tai-khoan/{id}',[MemberUserController::class,'khoaTaiKhoan'])->name('khoa-tai-khoan');
+               Route::get('mo-tai-khoan/{id}',[MemberUserController::class,'moKhoaTaiKhoan'])->name('mo-tai-khoan');
                Route::get('loi-chua-fix',[\App\Http\Controllers\Admin\NotificationController::class,'index'])->name('loi-chua-fix');
                Route::post('fix-loi',[\App\Http\Controllers\Admin\NotificationController::class,'store'])->name('fix-loi');
 

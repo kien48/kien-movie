@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'checkActiveMember'=>\App\Http\Middleware\CheckActiveUser::class,
         'checkSpamMember'=>\App\Http\Middleware\CheckSpamUser::class,
         'CongTienBaoLoi'=>\App\Http\Middleware\CongTienBaoLoi::class,
+        'CheckActiveAdmin'=>\App\Http\Middleware\CheckActiveAdmin::class,
     ];
 }

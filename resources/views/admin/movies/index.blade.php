@@ -5,6 +5,12 @@
 @section('content')
     <div class="d-flex justify-content-between mt-3 mb-3">
         <h1 class="text-center h3">Danh sách phim</h1>
+        <div style="height: 50px;width: 150px;background-color: #ef4444;border-radius: 10px;">
+            Có {{$countPhimDangCapNhat}} phim đang cập nhật
+        </div>
+        <div style="height: 50px;width: 150px;background-color: #20c997;border-radius: 10px;">
+            Có {{$countPhimFull}} phim đã full
+        </div>
         <a href="{{route('admin.movies.create')}}" class="btn btn-primary">Thêm mới</a>
     </div>
     @if(session('success'))
@@ -18,20 +24,30 @@
         <tr>
             <th>ID</th>
             <th>Tên</th>
+            <th>Danh sách</th>
             <th>Ảnh</th>
             <th>Ngôn ngữ</th>
             <th>Số tập</th>
             <th>Quốc gia</th>
             <th>Trạng thái</th>
+            <th>Giá</th>
+            <th>Vip</th>
             <th>Thao tác</th>
         </tr>
         </thead>
 
         <tbody>
         @foreach($data as $movie)
-            <tr>
+            @php
+            $class = "table-danger";
+            if($movie->trang_thai == 'Full'){
+                $class = "table-success";
+            }
+            @endphp
+            <tr class="{{$class}}">
                 <td>{{$movie->id}}</td>
                 <td>{{$movie->ten}}</td>
+                <td>{{$movie->lists->ten}}</td>
                 <td class="text-nowrap" style="width: 1px;">
                     <img src="{{$movie->anh}}" alt="" class="img-thumbnail" width="60px">
                 </td>
@@ -39,6 +55,8 @@
                 <td>{{$movie->so_tap}}</td>
                 <td>{{$movie->quoc_gia}}</td>
                 <td>{{$movie->trang_thai}}</td>
+                <td>{{$movie->gia}}</td>
+                <td>{{$movie->is_vip}}</td>
                 <td class="text-nowrap" style="width: 1px;">
                     <a href="{{route('admin.movies.show',$movie->slug)}}" class="btn btn-outline-info">Xem</a>
                     <a href="{{route('admin.movies.edit',$movie->slug)}}" class="btn btn-outline-warning">Sửa</a>

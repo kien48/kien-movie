@@ -29,7 +29,7 @@
                         </div>
                         <div class="mb-3 col-6">
                             <label for="pwd" class="form-label">Danh sách:</label>
-                            <select type="text" class="form-control" name="list_id" >
+                            <select type="text" class="form-control" name="list_id" ng-model="listId" ng-change="checkDanhSach()">
                                 <option value="">Chọn</option>
                                 @foreach($dataLists as $item)
                                     <option value="{{$item->id}}">{{$item->ten}}</option>
@@ -75,7 +75,7 @@
                         </div>
                         <div class="mb-3 col-6">
                             <label for="pwd" class="form-label">Mô tả:</label>
-                            <textarea class="form-control" name="mo_ta" >{{old('mo_ta')}}"</textarea>
+                            <textarea class="form-control" name="mo_ta" >{{old('mo_ta')}}</textarea>
                         </div>
                         <div class="mb-3 col-6">
                             <input class="form-check-input" type="checkbox" id="mySwitch" name="is_vip" value="1" ng-model="isVip" ng-change="updateGia()" checked>
@@ -94,7 +94,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="card mt-3 mb-3">
+                <div class="card mt-3 mb-3" ng-show="check == false"  ng-change="checkDanhSach()">
                     <div class="d-flex justify-content-between">
                         <h4>Tập</h4>
                         <button type="button" class="btn btn-danger" ng-click="addEpisode()">Thêm tập</button>
@@ -124,15 +124,6 @@
     @section('js')
         <script>
             viewFunction = ($scope,$http)=>{
-                $scope.episodes = [{ number: 1, link: '' }];
-                console.log($scope.episodes)
-                $scope.addEpisode = function() {
-                    $scope.episodes.push({ number: $scope.episodes.length + 1, link: '' });
-                };
-
-                $scope.removeEpisode = function(index) {
-                    $scope.episodes.splice(index, 1);
-                };
 
                 $scope.isVip = false;
                 $scope.gia = '';
@@ -143,6 +134,22 @@
                         $scope.gia = '';
                     }
                 };
+                $scope.check = false
+                $scope.checkDanhSach = ()=>{
+                    if($scope.listId == 6){
+                        $scope.check = true
+                        $scope.episodes = [];
+                    }else{
+                        $scope.check = false
+                        $scope.episodes = [{ number: 1, link: '' }];
+                        $scope.addEpisode = function() {
+                            $scope.episodes.push({ number: $scope.episodes.length + 1, link: '' });
+                        };
+                        $scope.removeEpisode = function(index) {
+                            $scope.episodes.splice(index, 1);
+                        };
+                    }
+                }
             }
         </script>
     @endsection

@@ -32,7 +32,7 @@
                 <td>{{$post->id}}</td>
                 <td>{{$post->tieu_de}}</td>
                 <td class="text-nowrap" style="width: 1px;">
-                    <img src="{{$post->anh}}" alt="" class="img-thumbnail" width="60px" alt="không có ảnh">
+                    <img src="{{\Storage::url($post->anh)}}" alt="" class="img-thumbnail" width="60px" alt="không có ảnh">
                 </td>
                 <td>{{$post->luot_xem}}</td>
                 <td>{{$post->user->name}}</td>

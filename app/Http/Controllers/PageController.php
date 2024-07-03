@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Catelogue;
+use App\Models\Fund;
+use App\Models\fundTransaction;
 use App\Models\Lists;
 use App\Models\Movie;
 use App\Models\User;
 use App\Models\UserMovieLike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -16,7 +20,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        $dataPhimMoiThem = Movie::query()
+        $dataPhimMoiThem = Movie::query()->with('lists')
             ->latest('id')
             ->take(12)
             ->get();
@@ -51,21 +55,21 @@ class PageController extends Controller
         if (Auth::check()) {
             $is_vip = Auth::user()->is_vip;
         }
-        $list_id = $model['list_id'];
 
-        $phimLienQuan = Movie::query()
-            ->where('list_id', $list_id)
-            ->where('slug', '!=', $slug)
-            ->get()
-            ->toArray();
+        $mangIdTheLoai = [];
+        foreach ($model['catelogue'] as $theLoai){
+            $mangIdTheLoai[] = $theLoai['id'];
+        }
+        $danhSachIdPhimLienQuan = DB::table('movie_catelogue')->whereIn('catelogue_id',$mangIdTheLoai)->get();
+        $phimIds = $danhSachIdPhimLienQuan->pluck('movie_id')->toArray();
+        $phimLienQuan = Movie::query()->with('lists')
+            ->whereIn('id', $phimIds)
+            ->where('slug','!=',$slug)
+            ->orderByDesc('id')
+            ->get();
         $dataUser = [];
         if (Auth::check()) {
             $dataUser = User::query()->with(['movies', 'coin'])->find(Auth::user()->id)->toArray();
-            foreach ($dataUser['movies'] as $item) {
-                if ($item['id'] == $model['id']) {
-                    $trangThaiMuaPhim = true;
-                }
-            }
         }
         return view('detail', compact('model', 'phimLienQuan', 'is_vip','dataUser'));
     }
@@ -188,13 +192,9 @@ class PageController extends Controller
 
     public function danhSachPhim(string $id)
     {
-        // Truy vấn để lấy dữ liệu từ bảng Movie với điều kiện list_id = $id
         $data = Movie::query()->where('list_id', $id)->paginate(18);
 
-        // Debug dữ liệu (nếu cần thiết)
-//         dd($data);
         $list = Lists::find($id);
-        // Trả về view 'lists' với dữ liệu đã truy vấn
         return view('lists', compact('data', 'list'));
     }
 
@@ -254,5 +254,11 @@ class PageController extends Controller
         return response()->json($json, 200);
     }
 
+    public function fund()
+    {
+        $tongQuy = Fund::query()->select('tong_tien')->get();
+        $lichSuGiaoDich = fundTransaction::query()->orderByDesc('id')->get();
+        return view('fund',compact('tongQuy','lichSuGiaoDich'));
+    }
 
 }

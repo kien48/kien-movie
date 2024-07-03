@@ -132,9 +132,18 @@
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                                 @endif
-                                <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                @if($data->trang_thai == 'Full')
+                                    @php $class= "danger" @endphp
+                                @elseif($data->lists->ten =="Phim sắp chiếu")
+                                    @php $class= "info" @endphp
+                                @else
+                                    @php $class= "success" @endphp
+                                @endif
+                                <span class="badge bg-{{$class}} rounded-0 position-absolute bottom-0 start-0">
                                     @if($data->trang_thai == 'Full')
                                         Full
+                                        @elseif($data->lists->ten =="Phim sắp chiếu")
+                                        Phim sắp chiếu
                                         @else
                                         Đang chiếu
                                     @endif
@@ -166,9 +175,18 @@
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                                 @endif
-                                <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                @if($data->trang_thai == 'Full')
+                                    @php $class= "danger" @endphp
+                                @elseif($data->lists->ten =="Phim sắp chiếu")
+                                    @php $class= "info" @endphp
+                                @else
+                                    @php $class= "success" @endphp
+                                @endif
+                                <span class="badge bg-{{$class}} rounded-0 position-absolute bottom-0 start-0">
                                     @if($data->trang_thai == 'Full')
                                         Full
+                                    @elseif($data->lists->ten =="Phim sắp chiếu")
+                                        Phim sắp chiếu
                                     @else
                                         Đang chiếu
                                     @endif
@@ -200,9 +218,18 @@
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                                 @endif
-                                <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                @if($data->trang_thai == 'Full')
+                                    @php $class= "danger" @endphp
+                                @elseif($data->lists->ten =="Phim sắp chiếu")
+                                    @php $class= "info" @endphp
+                                @else
+                                    @php $class= "success" @endphp
+                                @endif
+                                <span class="badge bg-{{$class}} rounded-0 position-absolute bottom-0 start-0">
                                     @if($data->trang_thai == 'Full')
                                         Full
+                                    @elseif($data->lists->ten =="Phim sắp chiếu")
+                                        Phim sắp chiếu
                                     @else
                                         Đang chiếu
                                     @endif
@@ -234,9 +261,18 @@
                                      <i class="fa-solid fa-crown"></i> Vip
                                     </span>
                                 @endif
-                                <span class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                                @if($data->trang_thai == 'Full')
+                                    @php $class= "danger" @endphp
+                                @elseif($data->lists->ten =="Phim sắp chiếu")
+                                    @php $class= "info" @endphp
+                                @else
+                                    @php $class= "success" @endphp
+                                @endif
+                                <span class="badge bg-{{$class}} rounded-0 position-absolute bottom-0 start-0">
                                     @if($data->trang_thai == 'Full')
                                         Full
+                                    @elseif($data->lists->ten =="Phim sắp chiếu")
+                                        Phim sắp chiếu
                                     @else
                                         Đang chiếu
                                     @endif

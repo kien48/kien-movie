@@ -63,6 +63,9 @@
                             </li>
                         @endforeach
                     @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('quy-phat-trien')}}">Quỹ phát triển</a>
+                        </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('blogs')}}">Blogs</a>
                     </li>
@@ -73,11 +76,20 @@
                             <button class="btn btn-outline-light border-0"><i class="fa-solid fa-magnifying-glass h4"></i></button>
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link " href="{{route('favourite')}}">
                             <button class="btn btn-outline-danger border-0"><i class="fa-regular fa-heart h4"></i>
                             </button>
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#">
+                            <button class="btn btn-outline-light border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo"><i class="fa-regular fa-envelope h4"></i></i>
+                            </button>
+                            @{{ demThongBao }}
+                        </a>
+
                     </li>
                     @if(Auth::check())
                         <li class="nav-item">
@@ -104,7 +116,18 @@
         </div>
     </nav>
 </header>
-
+<div class="offcanvas offcanvas-end text-bg-dark" id="demo">
+    <div class="offcanvas-header">
+        <h1 class="offcanvas-title">Thông báo từ Admin</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div ng-repeat="thongBao in danhSachThongBao" class="admin-message mb-3" style="background-color: #343a40; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <p style="margin: 0; color: #fff;">@{{ thongBao.noi_dung }}</p>
+            <button class="btn btn-danger">Đã đọc</button>
+        </div>
+    </div>
+</div>
 <div style="min-height: calc(100vh - 315px);margin-top: 90px;" ng-controller="viewCtrl">
     @yield('content')
 </div>
@@ -124,7 +147,6 @@
 </footer>
 
 <script>
-<<<<<<< HEAD
     document.addEventListener("DOMContentLoaded", function() {
         var loader = document.getElementById("loading-screen");
         window.addEventListener("load", function() {
@@ -138,18 +160,19 @@
 
     var myApp = angular.module('myApp', [])
     myApp.controller('myCtrl', function($http, $scope) {
-
+        $scope.danhSachThongBao = [];
+        $scope.demThongBao = '';
+        $scope.getThongBao = () =>{
+            $http.get('http://movie.test/api/danh-sach-thong-bao/{{Auth::user()->id}}')
+                .then(function (res){
+                    $scope.danhSachThongBao = res.data.data
+                    $scope.demThongBao = res.data.data.length
+                })
+        }
+        $scope.getThongBao()
     })
 
-    var viewFunction = function($scope) {
-
-    }
-=======
-    var myApp = angular.module('myApp', []);
-    myApp.controller('myCtrl', function($http, $scope) {});
-
     var viewFunction = function($scope) {};
->>>>>>> d2f0dcd2c6396b166729b6b65ace749cc252128c
 </script>
 @yield('js')
 <script>

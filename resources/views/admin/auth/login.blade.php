@@ -106,7 +106,7 @@
             <form action="{{route('admin.login')}}" method="POST">
                 @csrf
                 @if((session('error')))
-                    <li>{{session('error')}}</li>
+                    <li class="text-white">{{session('error')}}</li>
                 @endif
                 <div class="form-group">
                     <label for="email" class="text-light">Email</label>

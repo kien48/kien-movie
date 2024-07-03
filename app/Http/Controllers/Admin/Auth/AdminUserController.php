@@ -5,16 +5,19 @@ namespace App\Http\Controllers\Admin\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AdminUserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    const PATH_VIEW = 'admin.auth.admins.';
     public function index()
     {
         $data = User::query()->where('role', 'admin')->latest('id')->get();
-        return view('admin.auth.admins.index',compact('data'));
+        return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
     }
 
     /**
@@ -22,7 +25,7 @@ class AdminUserController extends Controller
      */
     public function create()
     {
-        //
+        return view(self::PATH_VIEW.__FUNCTION__);
     }
 
     /**
@@ -30,7 +33,27 @@ class AdminUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            "name"=>'required|max:255|string',
+            "email"=>'email|required',
+            "password"=>'min:8|required'
+        ]);
+
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $data = $request->all();
+        $data['name'] = "Admin ".$request->name;
+        $data['password'] = bcrypt($request->password);
+        $data['role'] = "admin";
+        $user = User::query()->create($data);
+        if($user){
+            return back()->with('success','Tạo tài khoản thành công');
+        }else{
+            return back()->with('error','Tạo tài khoản thất bại');
+        }
+
     }
 
     /**
@@ -38,7 +61,7 @@ class AdminUserController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -46,7 +69,8 @@ class AdminUserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $model = User::query()->where('id',$id)->get();
+        return view(self::PATH_VIEW.__FUNCTION__,compact('model'));
     }
 
     /**
@@ -54,7 +78,23 @@ class AdminUserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            "name"=>'required|max:255|string',
+            "email"=>'email|required',
+        ]);
+
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $data = $request->except('_token','_method');
+        $data['name'] = "Admin ".$request->name;
+        $user = User::query()->where('id',$id)->update($data);
+        if($user){
+            return back()->with('success','Cập nhật tài khoản thành công');
+        }else{
+            return back()->with('error','Cập nhật tài khoản thất bại');
+        }
     }
 
     /**

@@ -15,7 +15,7 @@
                             <a href="{{ route('detail', $item['slug']) }}" class="nav-link position-relative"
                                data-bs-toggle="tooltip" title="{{ $item['ten'] }}">
                                 <img src="{{$item['anh']}}" alt="" class="img-fluid" width="200px">
-                                    <span class="badge bg-success rounded-pill position-absolute top-0 end-0">
+                                    <span class="badge bg-success rounded-0 position-absolute top-0 end-0">
                                      Mua giá: {{number_format($item['xu'])}} xu <br>
                                         Mua ngày: {{ \Carbon\Carbon::parse($item['created_at'])->format('d/m/Y H') }}h<br>
                                     </span>

@@ -52,9 +52,9 @@
                 <td class="text-nowrap" style="width: 1px;">
                     <a href="{{route('admin.lich-xu-giao-dich',$admin->id)}}" class="btn btn-outline-info">Xem lịch sử giao dịch</a>
                     @if($admin->is_active==0)
-                        <a href="{{route('admin.khoa-tai-khoan-member',$admin->id)}}" class="btn btn-outline-danger">Khóa</a>
+                        <a href="{{route('admin.khoa-tai-khoan',$admin->id)}}" class="btn btn-outline-danger">Khóa</a>
                         @else
-                    <a href="{{route('admin.mo-tai-khoan-member',$admin->id)}}" class="btn btn-outline-warning">Mở khóa</a>
+                    <a href="{{route('admin.mo-tai-khoan',$admin->id)}}" class="btn btn-outline-warning">Mở khóa</a>
                     @endif
                 </td>
             </tr>

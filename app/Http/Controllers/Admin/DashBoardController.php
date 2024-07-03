@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bill;
 use App\Models\Comment;
 use App\Models\Episode;
+use App\Models\Fund;
 use App\Models\Movie;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ class DashBoardController extends Controller
         $nguoiDungMoiDangKy = User::query()->orderByDesc('created_at')->limit(5)->get();
         $binhLuanMoiNhat = Comment::query()->with('user')->orderByDesc('created_at')->limit(5)->get();
         $tongDanhThu = Bill::query()->select('xu')->sum('xu');
-        return view('admin.dashboard',compact('tongPhim','phimMoiTuan','tongLuotXem','thanhVienDangKyTuanNay','tongBinhLuan','adminDangKyTuanNay','nguoiDungMoiDangKy','binhLuanMoiNhat','phimMoiThem','tongDanhThu'));
+        $tongQuy = Fund::query()->select('tong_tien')->first();
+        return view('admin.dashboard',compact('tongPhim','phimMoiTuan','tongLuotXem','thanhVienDangKyTuanNay','tongBinhLuan','adminDangKyTuanNay','nguoiDungMoiDangKy','binhLuanMoiNhat','phimMoiThem','tongDanhThu','tongQuy'));
     }
 }

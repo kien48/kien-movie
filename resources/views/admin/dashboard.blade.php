@@ -55,6 +55,11 @@
         .dashboard-container {
             padding-top: 20px;
         }
+        .dashboard-card:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+
 
         .chart-container {
             margin-top: 30px;
@@ -107,6 +112,9 @@
             <div class="col-2 bg-dark  d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
                 <h3 class="text-center">Tổng danh thu: {{number_format($tongDanhThu)}}đ</h3>
             </div>
+            <div class="col-2 bg-light text-dark  d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
+                <h3 class="text-center">Tổng quỹ: {{number_format($tongQuy->tong_tien)}}đ</h3>
+            </div>
         </div>
 
         <div class="row recent-activities slide-in-elliptic-top-fwd">
@@ -135,14 +143,6 @@
                     @foreach($binhLuanMoiNhat as $bl)
                         <li>{{$bl->user->name}}: {{$bl->content}} - Thêm vào ngày {{$bl->created_at}}</li>
                     @endforeach
-                </ul>
-            </div>
-            <div class="col-6">
-                <h4>Thông báo hệ thống</h4>
-                <ul>
-                    <li>Hệ thống sẽ bảo trì vào ngày 10/06/2024</li>
-                    <li>Cập nhật phần mềm mới vào ngày 15/06/2024</li>
-                    <li>Lỗi hệ thống đã được khắc phục vào ngày 20/06/2024</li>
                 </ul>
             </div>
         </div>

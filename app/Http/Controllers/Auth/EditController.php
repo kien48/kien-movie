@@ -18,7 +18,6 @@ class EditController extends Controller
     {
         $data = $request->all();
 
-        // Lấy người dùng hiện tại đang đăng nhập
         $currentUser = Auth::user();
 
         // Kiểm tra email đã tồn tại nhưng không phải của người dùng hiện tại
@@ -27,13 +26,11 @@ class EditController extends Controller
             ->where('id', '!=', $currentUser->id)
             ->exists();
 
-        // Kiểm tra tên đã tồn tại nhưng không phải của người dùng hiện tại
         $nameExists = User::query()
             ->where('name', $data['ten'])
             ->where('id', '!=', $currentUser->id)
             ->exists();
 
-        // Xử lý các trường hợp lỗi
         if ($emailExists && $nameExists) {
             return back()->withErrors('Đã có tài khoản đăng ký email và tên này');
         } elseif ($emailExists) {
@@ -42,7 +39,6 @@ class EditController extends Controller
             return back()->withErrors('Đã có tài khoản đăng ký tên này');
         }
 
-        // Nếu không có lỗi, cập nhật thông tin người dùng hiện tại
         $currentUser->email = $data['email'];
         $currentUser->name = $data['ten'];
         $currentUser->save();
