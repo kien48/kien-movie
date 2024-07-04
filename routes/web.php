@@ -52,7 +52,7 @@ Route::middleware(['checkActiveMember','checkSpamMember','CongTienBaoLoi'])->gro
     Route::get('/danh-muc-bai-viet/{id}/{slug}', [App\Http\Controllers\PostController::class, 'catelogue'])->name('danhMucBaiViet');
     Route::get('/tag-bai-viet/{id}/{slug}', [App\Http\Controllers\PostController::class, 'tag'])->name('tagBaiViet');
     Route::post('/them-luot-xem', [App\Http\Controllers\PostController::class, 'themLuotXem'])->name('themLuotXem');
-    Route::get('/quy-phat-trien', [App\Http\Controllers\PageController::class, 'fund'])->name('quy-phat-trien');
+    Route::get('/quy-phat-trien', [App\Http\Controllers\FundController::class, 'index'])->name('quy-phat-trien');
 
     Auth::routes();
     Route::post('/them-luot-xem-phim', [App\Http\Controllers\MovieController::class, 'store'])->name('themLuotXemPhim');
@@ -68,6 +68,7 @@ Route::middleware(['auth','checkActiveMember','checkSpamMember','CongTienBaoLoi'
     Route::get('/cap-nhat-tai-khoan', [App\Http\Controllers\Auth\EditController::class, 'edit'])->name('capnhattk');
     Route::post('/cap-nhat-tai-khoan', [App\Http\Controllers\Auth\EditController::class, 'update'])->name('updatetk');
     Route::post('/bao-loi', [App\Http\Controllers\NotificationController::class, 'store'])->name('baoLoi');
+    Route::post('/da-doc', [\App\Http\Controllers\AdminNotificationController::class, 'daDoc'])->name('daDoc');
 
 });
 
@@ -78,6 +79,7 @@ Route::prefix('api')->group(function (){
     Route::resource('/comment', CommentController::class);
     Route::get('/favourite/{slug}', [PageController::class, 'apiListFavourite']);
     Route::get('/episode/{slug}', [\App\Http\Controllers\Admin\MovieController::class, 'apiEpisode']);
+    Route::get('/phim-hot', [\App\Http\Controllers\MovieController::class, 'apiPhimHot']);
     Route::get('/like/{movie_id}', [\App\Http\Controllers\PageController::class, 'apiUserLike']);
     Route::get('/count-like/{movie_id}', [\App\Http\Controllers\PageController::class, 'apiCounLikeMovie']);
     Route::get('/mua-phim-status/{slug}', [\App\Http\Controllers\PageController::class, 'apiTrangThaiMuaPhim']);
@@ -85,7 +87,7 @@ Route::prefix('api')->group(function (){
     Route::get('/luot-xem-tap-phim/{id}/{tap}', [\App\Http\Controllers\MovieController::class, 'apiTapPhim']);
     Route::get('/dem-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDemThongBaoLoiChuaFix']);
     Route::get('/danh-sach-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDanhSachBaoLoi']);
-    Route::get('/danh-sach-thong-bao/{id}', [\App\Http\Controllers\AdminNotificationController::class, 'apiHienThiThongBaoTheoUser']);
+    Route::get('/danh-sach-thong-bao', [\App\Http\Controllers\AdminNotificationController::class, 'apiHienThiThongBaoTheoUser']);
 
 
 });

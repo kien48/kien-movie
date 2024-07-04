@@ -13,7 +13,6 @@
                                      <i class="fa-solid fa-crown"></i>
                         <span ng-show="statusMuaPhim == true">Đã mua</span>
                         <span ng-show="statusMuaPhim == false">Có phí</span>
-
                                     </span>
                 @elseif($model['is_vip'] == true)
                     <span class="badge bg-warning rounded-pill position-absolute top-0 end-0">
@@ -24,8 +23,19 @@
             <div class="col-md-9 col-12">
                 <h3 class="mb-3"
                     style="font-weight: 700;font-size: 50px;@if($model['gia'] >= 1) color:red @elseif($model['is_vip'] == true) color:#fffa06 @else color:white @endif">{{$model['ten']}} </h3>
-                <h5 class="font-monospace text-light-emphasis mt-3">{{$model['chat_luong']}}
-                    ● {{$model['ngon_ngu']}} </h5>
+                <div class="d-flex mt-3">
+                    <h5 class="font-monospace text-light-emphasis ">{{$model['chat_luong']}}
+                        ● {{$model['ngon_ngu']}} ●</h5>
+                    <div class="d-flex text-warning ms-2">
+                        @for ($i = 1; $i <= $avgSao; $i++)
+                            <i class="fa-solid fa-star"></i>
+                        @endfor
+                        @for ($i = $avgSao + 1; $i <= 5; $i++)
+                            <i class="fa-regular fa-star"></i>
+                        @endfor
+                        ({{$soBinhLuan}} lượt đánh giá)
+                    </div>
+                </div>
                 <h5 class="font-monospace text-light-emphasis mt-3">Số tập: {{$model['so_tap']}} | Hiện
                     tại: {{$model['trang_thai']}} </h5>
                 <h5 class="font-monospace text-light-emphasis mt-3">Năm phát hành: {{$model['nam_phat_hanh']}}
@@ -55,7 +65,7 @@
                                     <h5> {{number_format($model['gia'])}} xu </h5>
                                 </div>
                             @endif
-                            <div class="d-flex mt-3 ms-3">
+                            <div class="d-flex mt-3 @if($model['is_vip'] == 0) ms-3 @endif">
                                 <h5 class="font-monospace text-light-emphasis">Lượt thích:</h5>
                                 <h5> @{{ countLike }} </h5>
                             </div>
@@ -106,12 +116,13 @@
                                     @endif
                                 @else
                                     <div class="mt-3">
-                                        <a href="#" class="btn btn-warning"
-                                           style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                                            <h2 style="margin: 0; display: flex; align-items: center;color: white;">
-                                                <i class="fa-solid fa-screwdriver-wrench"></i>
-                                            </h2>
-                                        </a>
+                                        <button class="btn btn-outline-info"
+                                                style="height: 80px; width: 170px; display: flex; align-items: center; justify-content: center;"
+                                                disabled>
+                                            <h4 style="margin: 0; display: flex; align-items: center;color: white;">
+                                                Phim sắp chiếu
+                                            </h4>
+                                        </button>
                                     </div>
                                 @endif
                             @endif
@@ -215,7 +226,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-warning">
                     <h3 class="modal-title text-white" id="myModalMuaPhimLabel">Mua phim</h3>
-                    <button type="button" id="close" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    <button type="button" id="close" class="btn-close btn-close-white btn-dong-phim" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -248,6 +259,7 @@
 
     <audio id="likeSound" src="{{asset('/')}}/themes/web phim/public/img/click.mp3" preload="auto"></audio>
     <audio id="loveSound" src="{{asset('/')}}/themes/web phim/public/img/love.mp3" preload="auto"></audio>
+    <audio id="coinSound" src="{{asset('/')}}/themes/web phim/public/img/coin.mp3" preload="auto"></audio>
 
     @section('js')
         <script>
@@ -343,8 +355,8 @@
                         coin: {{$model['gia']}}
                     }).then(function (res) {
                         $scope.ttMuaPhim();
-                        document.querySelector('.btn-close').click()
-                        alert('Mua phim thành công');
+                        document.querySelector('.btn-dong-phim').click()
+                        playCoinSound()
                     })
                 }
                 $scope.statusMuaPhim = false;
@@ -364,6 +376,10 @@
                 function playLoveSound() {
                     loveSound.currentTime =0;
                     loveSound.play()
+                }
+                function playCoinSound() {
+                    coinSound.currentTime =0;
+                    coinSound.play()
                 }
             };
         </script>

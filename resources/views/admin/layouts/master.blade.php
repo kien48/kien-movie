@@ -14,9 +14,47 @@
     <script src="{{asset('/')}}/themes/web phim/public/angular.js"></script>
     <script src="{{asset('/')}}/themes/web phim/public/font-fontawesome-ae333ffef2.js"></script>
     @yield('css')
+    <style>
+        #loading-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: black;
+            color: red;
+            font-size: 2em;
+            z-index: 1000;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px grey;
+            border-radius: 10px;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #9ca3af;
+            border-radius: 10px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b30000;
+        }
+    </style>
 </head>
 
 <body ng-app="myApp" ng-controller="myCtrl">
+<div id="loading-screen"></div>
+
 <nav class="navbar navbar-expand-lg navbar-dark" style="margin-top: -10px">
     <div class="container-fluid header">
         <a class="navbar-brand" href="#">KienMovie</a>
@@ -89,6 +127,16 @@
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var loader = document.getElementById("loading-screen");
+        window.addEventListener("load", function() {
+            loader.style.transition = "opacity 1s";
+            loader.style.opacity = 0;
+            setTimeout(function() {
+                loader.style.display = "none";
+            }, 1000);
+        });
+    });
     var myApp = angular.module('myApp',[])
     myApp.controller('myCtrl',function ($scope,$http){
         $scope.count = 0;

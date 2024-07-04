@@ -40,5 +40,14 @@ class Movie extends Model
         return $this->belongsTo(Lists::class, 'list_id', 'id');
     }
 
+    public function comment()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function userMovie()
+    {
+        return $this->belongsToMany('App\Models\User', 'user_movie', 'movie_id', 'user_id');
+    }
 
 }

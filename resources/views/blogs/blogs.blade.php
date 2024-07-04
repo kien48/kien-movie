@@ -4,76 +4,160 @@
 @endsection
 @section('css')
     <style>
-        .header {
+
+        body {
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        /* Header styles */
+        .headered {
             text-align: center;
-            padding: 30px 0;
+            padding: 50px 0;
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            color: #ff3333;
+        .headered h1 {
+            font-size: 3rem;
+            color: #1e1e2f;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 2px;
         }
 
+        /* Content area */
         .content {
             display: flex;
-            flex-wrap: wrap;
             gap: 20px;
         }
 
         .main-content {
-            flex: 3;
+            flex: 2;
         }
 
         .sidebar {
             flex: 1;
         }
 
-        .post, .widget, .box {
-            background-color: #2c2c2c;
-            padding: 15px;
+        /* Post, widget, box styles */
+        .post,
+        .widget,
+        .box {
+            background-color: #fff;
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .post h4, .widget h3, .box h3 {
-            font-size: 1.5rem;
-            color: #ff3333;
-            margin-bottom: 10px;
+        .post:hover,
+        .widget:hover,
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .post h4,
+        .widget h3,
+        .box h3 {
+            font-size: 1.8rem;
+            color: #1e1e2f;
+            margin-bottom: 15px;
         }
 
         .post img {
             max-width: 100%;
+            height: auto;
             border-radius: 10px;
+            margin-bottom: 15px;
         }
 
-        .widget ul, .box .categories, .box .tags {
+        .widget ul,
+        .box .categories,
+        .box .tags {
             list-style: none;
             padding: 0;
         }
 
-        .widget ul li, .box .categories a, .box .tags a {
+        .widget ul li,
+        .box .categories a,
+        .box .tags a {
             margin-bottom: 10px;
         }
 
-        .widget ul li a, .box .categories a, .box .tags a {
+        .widget ul li a,
+        .box .categories a,
+        .box .tags a {
             text-decoration: none;
             color: #fff;
-            background-color: #ff3333;
+            background-color: #1e1e2f;
             padding: 10px 20px;
             border-radius: 20px;
             display: inline-block;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
         }
 
-        .widget ul li a:hover, .box .categories a:hover, .box .tags a:hover {
-            background-color: #cc0000;
+        .widget ul li a:hover,
+        .box .categories a:hover,
+        .box .tags a:hover {
+            background-color: #ff3333;
+            color: #fff;
         }
+
+        /* Sidebar specific styles */
+        .widget {
+            background-color: #f4f4f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .widget h3 {
+            font-size: 2rem;
+            color: #1e1e2f;
+            margin-bottom: 15px;
+        }
+
+        /* Box specific styles */
+        .box {
+            background-color: #f4f4f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .box h3 {
+            font-size: 2rem;
+            color: #1e1e2f;
+            margin-bottom: 15px;
+        }
+
+        .box .categories a,
+        .box .tags a {
+            background-color: #1e1e2f;
+            color: #fff;
+            border: 2px solid #1e1e2f;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+        }
+
+        .box .categories a:hover,
+        .box .tags a:hover {
+            background-color: #ff3333;
+            border-color: #ff3333;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+
     </style>
 @endsection
 @section('content')
     <div class="container">
-        <header class="header">
+        <header class="headered">
             <h1>@yield('title-post')</h1>
         </header>
         <div class="content">

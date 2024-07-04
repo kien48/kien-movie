@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fund;
+use App\Models\fundTransaction;
 use Illuminate\Http\Request;
 
 class FundController extends Controller
@@ -12,7 +13,9 @@ class FundController extends Controller
      */
     public function index()
     {
-        //
+        $tongQuy = Fund::query()->select('tong_tien')->get();
+        $lichSuGiaoDich = fundTransaction::query()->with('user')->orderByDesc('id')->get();
+        return view('fund',compact('tongQuy','lichSuGiaoDich'));
     }
 
     /**

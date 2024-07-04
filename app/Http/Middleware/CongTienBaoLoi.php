@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\AdminNotification; // Fixed model name to match casing convention
 use App\Models\Fund;
-use App\Models\FundTransaction; // Updated model name
+use App\Models\FundTransaction;
 use App\Models\Notification;
 use App\Models\User;
 use Closure;
@@ -26,8 +27,8 @@ class CongTienBaoLoi
             $tongQuy = Fund::query()->select('tong_tien')->first();
             $tongTienTrongQuy = $tongQuy->tong_tien ?? 0;
 
-            $user = User::query()->with('coin')->find(Auth::id()); // Simplified to use find method
-            $userCoin = $user->coin[0]->coin ;
+            $user = User::query()->with('coin')->find(Auth::id());
+            $userCoin = $user->coin[0]->coin;
 
             $dem = Notification::query()
                 ->where('user_id', Auth::id())
@@ -36,34 +37,19 @@ class CongTienBaoLoi
 
             if ($tongTienTrongQuy > 20000) {
                 if ($dem == 20) {
-                    $this->congTienThuong(Auth::id(), $userCoin, 10000, "+10000", "Tiền thưởng báo lỗi phim trên 20 lần đã giúp admin fix thành công");
-                    FundTransaction::query()->create([
-                        'user_id' => Auth::id(), // Use Auth::id() directly
-                        'bien_dong_so_du' => '-10000', // Use negative value for decrement
-                        'mo_ta' => "Tiền thưởng báo lỗi phim trên 20 lần đã giúp admin fix thành công", // Corrected quotation
-                        'truoc_giao_dich' => $tongTienTrongQuy,
-                        'sau_giao_dich' => $tongTienTrongQuy - 10000,
-                    ]);
+                    $this->congTienThuong(Auth::id(), $userCoin, 10000, "+10000", "Tiền thưởng báo lỗi phim 20 lần đã giúp admin fix thành công");
+                    $this->createFundTransaction(Auth::id(), 10000, $tongTienTrongQuy, "Tiền thưởng báo lỗi phim trên 20 lần đã giúp admin fix thành công");
+                    $this->createAdminNotification(Auth::id(), "Tiền thưởng báo lỗi phim 20 lần đã giúp admin fix thành công");
                     Fund::query()->decrement('tong_tien', 10000);
                 } elseif ($dem == 10) {
-                    $this->congTienThuong(Auth::id(), $userCoin, 5000, "+5000", "Tiền thưởng báo lỗi phim trên 10 lần đã giúp admin fix thành công");
-                    FundTransaction::query()->create([
-                        'user_id' => Auth::id(),
-                        'bien_dong_so_du' => '-5000',
-                        'mo_ta' => "Tiền thưởng báo lỗi phim trên 10 lần đã giúp admin fix thành công",
-                        'truoc_giao_dich' => $tongTienTrongQuy,
-                        'sau_giao_dich' => $tongTienTrongQuy - 5000,
-                    ]);
+                    $this->congTienThuong(Auth::id(), $userCoin, 5000, "+5000", "Tiền thưởng báo lỗi phim 10 lần đã giúp admin fix thành công");
+                    $this->createFundTransaction(Auth::id(), 5000, $tongTienTrongQuy, "Tiền thưởng báo lỗi phim trên 10 lần đã giúp admin fix thành công");
+                    $this->createAdminNotification(Auth::id(), "Tiền thưởng báo lỗi phim 10 lần đã giúp admin fix thành công");
                     Fund::query()->decrement('tong_tien', 5000);
                 } elseif ($dem == 5) {
-                    $this->congTienThuong(Auth::id(), $userCoin, 2000, "+2000", "Tiền thưởng báo lỗi phim trên 5 lần đã giúp admin fix thành công");
-                    FundTransaction::query()->create([
-                        'user_id' => Auth::id(),
-                        'bien_dong_so_du' => '-2000',
-                        'mo_ta' => "Tiền thưởng báo lỗi phim trên 5 lần đã giúp admin fix thành công",
-                        'truoc_giao_dich' => $tongTienTrongQuy,
-                        'sau_giao_dich' => $tongTienTrongQuy - 2000,
-                    ]);
+                    $this->congTienThuong(Auth::id(), $userCoin, 2000, "+2000", "Tiền thưởng báo lỗi phim 5 lần đã giúp admin fix thành công");
+                    $this->createFundTransaction(Auth::id(), 2000, $tongTienTrongQuy, "Tiền thưởng báo lỗi phim 5 lần đã giúp admin fix thành công");
+                    $this->createAdminNotification(Auth::id(), "Tiền thưởng báo lỗi phim 5 lần đã giúp admin fix thành công");
                     Fund::query()->decrement('tong_tien', 2000);
                 }
             }
@@ -93,5 +79,24 @@ class CongTienBaoLoi
                 "ngay_tao" => now()
             ]);
         }
+    }
+
+    private function createFundTransaction($userId, $amount, $tongTienTrongQuy, $moTa)
+    {
+        FundTransaction::query()->create([
+            'user_id' => $userId,
+            'bien_dong_so_du' => -$amount, // Use negative value for decrement
+            'mo_ta' => $moTa,
+            'truoc_giao_dich' => $tongTienTrongQuy,
+            'sau_giao_dich' => $tongTienTrongQuy - $amount,
+        ]);
+    }
+
+    private function createAdminNotification($userId, $noiDung)
+    {
+        AdminNotification::create([
+            'user_id' => $userId,
+            'noi_dung' => $noiDung
+        ]);
     }
 }

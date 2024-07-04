@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\adminNotification;
 use App\Models\Bill;
 use App\Models\Comment;
 use App\Models\Payment_recharge;
@@ -144,6 +145,10 @@ class HomeController extends Controller
                     'bien_dong_so_du' => "+".$tien,
                     'mo_ta'=>'Nạp tiền mã giao dịch: '.$ma_giao_dich,
                     'ngay_tao'=>now()
+                ]);
+                AdminNotification::create([
+                    'user_id' => $user_id,
+                    'noi_dung' => 'Tài khoản của bạn đã thành công: '.$tien .'xu',
                 ]);
 
             }

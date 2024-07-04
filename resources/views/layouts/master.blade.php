@@ -31,6 +31,26 @@
             font-size: 2em;
             z-index: 1000;
         }
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px grey;
+            border-radius: 10px;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #9ca3af;
+            border-radius: 10px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b30000;
+        }
     </style>
 </head>
 
@@ -38,7 +58,7 @@
 <div id="loading-screen"></div>
 
 <header id="trangchu">
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow fw-bold" style="backdrop-filter: blur(10px);">
+    <nav class="navbar navbar-expand-lg navbar- fixed-top shadow fw-bold" style="backdrop-filter: blur(10px);">
         <div class="container">
             <a class="navbar-brand bounce-in-top" href="{{route('home')}}">KienMovie</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -55,6 +75,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#tv">TV Shows</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#phimsapchieu">Phim sắp chiếu</a>
                         </li>
                     @else
                         @foreach($lists as $key=>$value)
@@ -83,15 +106,14 @@
                             </button>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="#">
-                            <button class="btn btn-outline-light border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo"><i class="fa-regular fa-envelope h4"></i></i>
-                            </button>
-                            @{{ demThongBao }}
-                        </a>
-
-                    </li>
                     @if(Auth::check())
+                        <li class="nav-item">
+                            <a class="nav-link " href="">
+                                <button class="btn btn-outline-light border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo1"><i class="fa-regular fa-envelope h4"></i>
+                                    <span class="badge rounded-pill bg-warning " style="margin-left: -10px">@{{ demThongBao }}</span>
+                                </button>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link " href="{{route('index')}}">
                                 <button class="btn @if(Auth::user()->is_vip == 1) btn-outline-warning @else btn-outline-light @endif">
@@ -116,16 +138,18 @@
         </div>
     </nav>
 </header>
-<div class="offcanvas offcanvas-end text-bg-dark" id="demo">
+<div class="offcanvas offcanvas-end text-bg-dark" id="demo1">
     <div class="offcanvas-header">
         <h1 class="offcanvas-title">Thông báo từ Admin</h1>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
-        <div ng-repeat="thongBao in danhSachThongBao" class="admin-message mb-3" style="background-color: #343a40; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
-            <p style="margin: 0; color: #fff;">@{{ thongBao.noi_dung }}</p>
-            <button class="btn btn-danger">Đã đọc</button>
+        <div ng-repeat="thongBao in danhSachThongBao" class="admin-message mb-3" style="background-color: #343a40; border-radius: 10px; padding: 15px;  align-items: center;">
+            <p style="; color: #fff;">@{{ thongBao.noi_dung }}</p>
+            <p style=" color: #fff;">@{{ thongBao.created_at | date:'HH:mm dd/MM/yyyy' }}</p>
+            <button ng-click="daDoc(thongBao.id)" class="btn btn-danger" style="margin-left: 10px;">Đã đọc</button>
         </div>
+
     </div>
 </div>
 <div style="min-height: calc(100vh - 315px);margin-top: 90px;" ng-controller="viewCtrl">
@@ -163,13 +187,22 @@
         $scope.danhSachThongBao = [];
         $scope.demThongBao = '';
         $scope.getThongBao = () =>{
-            $http.get('http://movie.test/api/danh-sach-thong-bao/{{Auth::user()->id}}')
+            $http.get('http://movie.test/api/danh-sach-thong-bao')
                 .then(function (res){
                     $scope.danhSachThongBao = res.data.data
                     $scope.demThongBao = res.data.data.length
                 })
         }
         $scope.getThongBao()
+        setInterval($scope.getThongBao,5000)
+        $scope.daDoc = (id) =>{
+            $http.post('{{route('daDoc')}}',{
+                'id': id
+            }).then(function (res){
+                $scope.getThongBao()
+                $scope.demThongBao = res.data.data
+            })
+        }
     })
 
     var viewFunction = function($scope) {};

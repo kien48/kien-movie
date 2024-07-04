@@ -100,6 +100,29 @@
             color: #ddd;
         }
 
+        .movie-card-inner {
+            position: relative;
+        }
+
+        .order-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(255, 69, 0, 0.8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-card:hover .order-number {
+            opacity: 1;
+        }
+
+
     </style>
 @endsection
 @section('content')
@@ -142,9 +165,9 @@
                                 <span class="badge bg-{{$class}} rounded-0 position-absolute bottom-0 start-0">
                                     @if($data->trang_thai == 'Full')
                                         Full
-                                        @elseif($data->lists->ten =="Phim sắp chiếu")
+                                    @elseif($data->lists->ten =="Phim sắp chiếu")
                                         Phim sắp chiếu
-                                        @else
+                                    @else
                                         Đang chiếu
                                     @endif
                                 </span>
@@ -154,6 +177,37 @@
                 </div>
             </div>
         </div>
+        <div class="row mb-4">
+            <div class="col mb-1">
+                <div id="tv" class="d-flex justify-content-between" style="padding-top: 72px">
+                    <h2>Phim hot nhất</h2>
+                </div>
+                <div class="row">
+                    <div ng-repeat="data in phimHot" class="col-6 col-sm-4 col-md-3 col-lg-2 movie-card mb-3 mt-3">
+                        <a href="detail/@{{ data.slug }}" class="nav-link position-relative" data-bs-toggle="tooltip"
+                           title="@{{ data.ten }}">
+                            <img src="@{{ data.anh }}" alt="" class="img-fluid" width="200px">
+                            <span ng-show="data.gia >= 1" class="badge bg-danger rounded-0 position-absolute top-0 end-0">
+                <i class="fa-solid fa-crown"></i> Có phí
+            </span>
+                            <span ng-show="data.is_vip == true" class="badge bg-warning rounded-0 position-absolute top-0 end-0">
+                <i class="fa-solid fa-crown"></i> Vip
+            </span>
+                            <span ng-if="data.trang_thai == 'Full'" class="badge bg-danger rounded-0 position-absolute bottom-0 start-0">
+                Full
+            </span>
+                            <span ng-if="data.lists.ten == 'Phim sắp chiếu'" class="badge bg-info rounded-0 position-absolute bottom-0 start-0">
+                Phim sắp chiếu
+            </span>
+                            <span ng-if="data.trang_thai != 'Full' && data.lists.ten != 'Phim sắp chiếu'" class="badge bg-success rounded-0 position-absolute bottom-0 start-0">
+                Đang chiếu
+            </span>
+                            <span class="order-number">@{{ $index + 1 }}</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
         <div class="row mb-4">
             <div class="col mb-1">
                 <div id="phimle" class="d-flex justify-content-between" style="padding-top: 72px">
@@ -283,5 +337,68 @@
                 </div>
             </div>
         </div>
+        <div class="row mb-4">
+            <div class="col mb-1">
+                <div id="phimsapchieu" class="d-flex justify-content-between" style="padding-top: 72px">
+                    <h2>Phim sắp chiếu</h2>
+                    <a href="{{route('lists',6)}}" class="nav-link"><h4>Xem thêm</h4></a>
+                </div>
+                <div class="row">
+                    @foreach($dataPhimSapChieu as $data)
+                        <div class="col-6 col-sm-4 col-md-3 col-lg-2 movie-card mb-3 mt-3">
+                            <a href="{{ route('detail', $data->slug) }}" class="nav-link position-relative"
+                               data-bs-toggle="tooltip" title="{{ $data->ten }}">
+                                <img src="{{$data->anh}}" alt="" class="img-fluid" width="200px">
+                                @if($data->gia >= 1)
+                                    <span class="badge bg-danger rounded-0 position-absolute top-0 end-0">
+                                     <i class="fa-solid fa-crown"></i> Có phí
+                                    </span>
+                                @elseif($data->is_vip == true)
+                                    <span class="badge bg-warning rounded-0 position-absolute top-0 end-0">
+                                     <i class="fa-solid fa-crown"></i> Vip
+                                    </span>
+                                @endif
+                                @if($data->trang_thai == 'Full')
+                                    @php $class= "danger" @endphp
+                                @elseif($data->lists->ten =="Phim sắp chiếu")
+                                    @php $class= "info" @endphp
+                                @else
+                                    @php $class= "success" @endphp
+                                @endif
+                                <span class="badge bg-{{$class}} rounded-0 position-absolute bottom-0 start-0">
+                                    @if($data->trang_thai == 'Full')
+                                        Full
+                                    @elseif($data->lists->ten =="Phim sắp chiếu")
+                                        Phim sắp chiếu
+                                    @else
+                                        Đang chiếu
+                                    @endif
+                                </span>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
     </div>
+
+    @section('js')
+        <script>
+            viewFunction = ($scope, $http) => {
+                $scope.phimHot = []
+                $scope.getPhimHot = () => {
+                    $http.get('http://movie.test/api/phim-hot')
+                        .then(function (response) {
+                            $scope.phimHot = response.data.data
+                            console.log($scope.phimHot)
+                        })
+                        .catch(function (error) {
+                            console.error(error);
+                        });
+                }
+                $scope.getPhimHot()
+                setInterval($scope.getPhimHot, 1000)
+            }
+        </script>
+    @endsection
 @endsection

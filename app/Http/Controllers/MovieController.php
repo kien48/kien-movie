@@ -7,6 +7,7 @@ use App\Models\Episode;
 use App\Models\Lists;
 use App\Models\Movie;
 use App\Models\MovieCatelogue;
+use App\Models\UserMovieLike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -49,6 +50,31 @@ class MovieController extends Controller
             'luot_xem'=>$luotXem
         ];
         return response()->json($json,200);
+    }
+
+    public function apiPhimHot()
+    {
+        $soLuongLike = UserMovieLike::query()
+            ->select('movie_id', DB::raw('COUNT(*) as count'))
+            ->groupBy('movie_id')
+            ->orderByDesc('count')
+            ->limit(6)
+            ->pluck('movie_id')
+            ->toArray(); // Chuyển đổi thành mảng để sử dụng trong orderByRaw
+
+// Lấy danh sách phim và giữ nguyên thứ tự
+        $movies = Movie::query()
+            ->whereIn('id', $soLuongLike)
+            ->orderByRaw('FIELD(id, ' . implode(',', $soLuongLike) . ')')
+            ->get();
+
+
+        $json = [
+            'status' => true,
+            'data' => $movies
+        ];
+
+        return response()->json($json, 200);
     }
 
     /**

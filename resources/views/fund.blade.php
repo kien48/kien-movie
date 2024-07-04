@@ -65,11 +65,12 @@
         <!-- Lịch sử trao thưởng -->
         <section class="history-section">
             <div class="container">
-                <h2 class="text-center" style="color: #ff4c4c;">Lịch Sử Trao Thưởng</h2>
+                <h2 class="text-center" style="color: #ff4c4c;">Lịch Sử Giao Dịch</h2>
                 <div class="table-responsive">
                     <table id="example" class="table table-bordered table-hover history-table mt-4">
                         <thead>
                         <tr>
+                            <th>Số thứ tự</th>
                             <th>Người dùng</th>
                             <th>Biến động số dư</th>
                             <th>Trước giao dịch</th>
@@ -79,9 +80,11 @@
                         </tr>
                         </thead>
                         <tbody>
+                        @php $dem = 1 @endphp
                         @foreach($lichSuGiaoDich as $item)
                             <tr>
-                                <td>{{ $item->user_id }}</td>
+                                <td>{{$dem++}}</td>
+                                <td>{{ $item->user->name }}</td>
                                 <td>{{ $item->bien_dong_so_du }}</td>
                                 <td>{{ $item->truoc_giao_dich }}</td>
                                 <td>{{ $item->sau_giao_dich }}</td>
@@ -114,7 +117,7 @@
         $(document).ready(function() {
             $('#example').DataTable({
                 responsive: true,
-                order: [[0, 'desc']]
+                order: [[1, 'desc']]
             });
         });
     </script>

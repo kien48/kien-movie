@@ -41,9 +41,14 @@
                     <h5> {{$model['dao_dien']}} </h5>
                 </div>
                 @if(Auth::check())
-                    <div class="d-flex mt-3">
+                    <div class="d-flex mt-3" ng-show="hienNutBaoLoi == true;">
                         <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
                             Báo lỗi
+                        </button>
+                    </div>
+                    <div class="d-flex mt-3" ng-show="hienNutBaoLoi == false;">
+                        <button class="btn btn-secondary">
+                            Bạn đã báo lỗi
                         </button>
                     </div>
                 @endif
@@ -129,7 +134,7 @@
     <div class="offcanvas offcanvas-end" id="demo">
         <div class="offcanvas-header">
             <h1 class="offcanvas-title">Báo lỗi phim "{{$model['ten']}}"</h1>
-            <button type="button" id="class" class="btn-close"  data-bs-dismiss="offcanvas"></button>
+            <button type="button" id="class" class="btn-close btn-dong"  data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body">
             <input type="text" ng-model="noi_dung" class="form-control" placeholder="Điền trường hợp phim bị lỗi để chúng tôi xử lý">
@@ -196,6 +201,7 @@
                         $scope.themLuotXem()
                     }
                 },1000)
+                $scope.hienNutBaoLoi = true;
              $scope.baoLoi = ()=>{
                  $http.post("{{route('baoLoi')}}",{
                      movie_id : {{$model['id']}},
@@ -203,8 +209,9 @@
                      noi_dung : $scope.noi_dung
                  }).then(function (res){
                      alert('Gửi thông báo lỗi thành công')
-                     document.querySelector('.btn-close').click()
+                     document.querySelector('.btn-dong').click()
                      $scope.noi_dung= ''
+                     $scope.hienNutBaoLoi = false;
                  })
              }
             };

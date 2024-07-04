@@ -20,7 +20,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        $dataPhimMoiThem = Movie::query()->with('lists')
+        $dataPhimMoiThem = Movie::query()->with(['lists'])
             ->latest('id')
             ->take(12)
             ->get();
@@ -39,18 +39,33 @@ class PageController extends Controller
             ->latest('id')
             ->take(12)
             ->get();
+        $dataPhimSapChieu = Movie::query()
+            ->where('list_id', 6)
+            ->latest('id')
+            ->take(12)
+            ->get();
 
-        return view('page', compact('dataPhimMoiThem', 'dataPhimLe', 'dataPhimBo', 'dataTvShows'));
+        return view('page', compact('dataPhimMoiThem', 'dataPhimLe', 'dataPhimBo', 'dataTvShows','dataPhimSapChieu'));
     }
 
     public function detail(string $slug)
     {
 
         $model = Movie::query()
-            ->with(['catelogue', 'episode'])
+            ->with(['catelogue', 'episode','comment'])
             ->where('slug', $slug)
             ->firstOrFail()
             ->toArray();
+        $mangSao = [];
+        if(count($model['comment']) > 0){
+            foreach ($model['comment'] as $item){
+                $mangSao[] = $item['sao'];
+            }
+            $avgSao = array_sum($mangSao) / count($mangSao);
+        }else{
+            $avgSao = 0;
+        }
+        $soBinhLuan = count($model['comment']);
         $is_vip = 0;
         if (Auth::check()) {
             $is_vip = Auth::user()->is_vip;
@@ -71,7 +86,7 @@ class PageController extends Controller
         if (Auth::check()) {
             $dataUser = User::query()->with(['movies', 'coin'])->find(Auth::user()->id)->toArray();
         }
-        return view('detail', compact('model', 'phimLienQuan', 'is_vip','dataUser'));
+        return view('detail', compact('model', 'phimLienQuan', 'is_vip','dataUser','avgSao','soBinhLuan'));
     }
 
 
@@ -129,15 +144,12 @@ class PageController extends Controller
 
     public function watch(string $slug, int $tap, Request $request)
     {
-        // Tìm phim theo slug
         $model = Movie::query()->with(['catelogue', 'episode'])
             ->where('slug', $slug)
             ->firstOrFail();
 
-        // Tìm tập phim theo tap
         $episode = $model->episode()->where('tap', $tap)->firstOrFail()->toArray();
 
-        // Chuyển dữ liệu phim và tập phim sang view
         return view('watch', compact('model', 'episode'));
     }
 
@@ -148,45 +160,34 @@ class PageController extends Controller
 
     public function addFavourite(Request $request)
     {
-        // Kiểm tra xem session 'favourite' đã tồn tại chưa, nếu chưa thì khởi tạo nó với một mảng rỗng
         if (!session()->has('favourite')) {
             session(['favourite' => []]);
         }
 
-        // Lấy giá trị của session 'favourite'
         $favourites = session('favourite');
 
-        // Tìm bộ phim theo ID
         $movie = Movie::find($request->movie_id);
 
-        // Kiểm tra nếu bộ phim tồn tại và không có trong danh sách yêu thích
         if ($movie && !in_array($movie->id, array_column($favourites, 'id'))) {
-            // Thêm bộ phim vào danh sách yêu thích
             $favourites[] = $movie;
             session(['favourite' => $favourites]);
         }
 
-        // C// Quay lại trang trước
         return back();
     }
 
     public function removeFavourite(Request $request)
     {
-        // Lấy ID của bộ phim cần xóa
         $id = $request->id;
 
-        // Lấy danh sách yêu thích từ session
         $favourites = session('favourite', []);
 
-        // Tìm và loại bỏ bộ phim có ID tương ứng khỏi danh sách yêu thích
         $updatedFavourites = array_filter($favourites, function ($movie) use ($id) {
             return $movie['id'] != $id;
         });
 
-        // Cập nhật lại session với danh sách yêu thích đã được loại bỏ bộ phim
         session(['favourite' => $updatedFavourites]);
 
-        // Quay lại trang trước
         return back();
     }
 
@@ -254,11 +255,5 @@ class PageController extends Controller
         return response()->json($json, 200);
     }
 
-    public function fund()
-    {
-        $tongQuy = Fund::query()->select('tong_tien')->get();
-        $lichSuGiaoDich = fundTransaction::query()->orderByDesc('id')->get();
-        return view('fund',compact('tongQuy','lichSuGiaoDich'));
-    }
 
 }

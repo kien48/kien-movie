@@ -16,4 +16,9 @@ class fundTransaction extends Model
 'truoc_giao_dich',
 'sau_giao_dich',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

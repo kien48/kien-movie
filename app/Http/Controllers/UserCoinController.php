@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\adminNotification;
 use App\Models\Bill;
 use App\Models\Fund;
 use App\Models\fundTransaction;
@@ -51,6 +52,10 @@ class UserCoinController extends Controller
                     'mo_ta'=>'Nạp quỹ khi mua phim '.$ten_movie,
                     'truoc_giao_dich'=>$tongQuy->tong_tien,
                     'sau_giao_dich'=>$tongQuy->tong_tien + $coinFund,
+                ]);
+                adminNotification::query()->create([
+                    'user_id'=>$user->id,
+                    'noi_dung'=>'Bạn đã mua phim: '.$ten_movie.' Thành công',
                 ]);
                 Fund::query()->increment('tong_tien', $coinFund);
                 DB::commit();

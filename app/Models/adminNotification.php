@@ -11,7 +11,5 @@ class adminNotification extends Model
     protected $fillable = [
        'user_id',
         'noi_dung',
-        'trang_thai',
-
     ];
 }
