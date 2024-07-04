@@ -7,6 +7,7 @@ use App\Models\Fund;
 use App\Models\fundTransaction;
 use App\Models\Lists;
 use App\Models\Movie;
+use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserMovieLike;
 use Illuminate\Http\Request;
@@ -44,8 +45,8 @@ class PageController extends Controller
             ->latest('id')
             ->take(12)
             ->get();
-
-        return view('page', compact('dataPhimMoiThem', 'dataPhimLe', 'dataPhimBo', 'dataTvShows','dataPhimSapChieu'));
+        $banner = Setting::query()->select(['banner_video','tieu_de','noi_dung','id'])->get();
+        return view('page', compact('dataPhimMoiThem', 'dataPhimLe', 'dataPhimBo', 'dataTvShows','dataPhimSapChieu','banner'));
     }
 
     public function detail(string $slug)
@@ -86,7 +87,13 @@ class PageController extends Controller
         if (Auth::check()) {
             $dataUser = User::query()->with(['movies', 'coin'])->find(Auth::user()->id)->toArray();
         }
-        return view('detail', compact('model', 'phimLienQuan', 'is_vip','dataUser','avgSao','soBinhLuan'));
+        $dataLuotXem = [];
+
+        foreach ($model['episode'] as $item){
+            $dataLuotXem[] = $item['luot_xem'];
+        }
+        $tongLuotXem = array_sum($dataLuotXem);
+        return view('detail', compact('model', 'phimLienQuan', 'is_vip','dataUser','avgSao','soBinhLuan','tongLuotXem'));
     }
 
 

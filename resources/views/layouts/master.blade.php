@@ -96,21 +96,21 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('search')}}">
-                            <button class="btn btn-outline-light border-0"><i class="fa-solid fa-magnifying-glass h4"></i></button>
+                            <button class="btn btn-outline-light border-0"><i class="fa-solid fa-magnifying-glass h5"></i></button>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link " href="{{route('favourite')}}">
-                            <button class="btn btn-outline-danger border-0"><i class="fa-regular fa-heart h4"></i>
+                            <button class="btn btn-outline-danger border-0"><i class="fa-regular fa-heart h5"></i>
                             </button>
                         </a>
                     </li>
                     @if(Auth::check())
                         <li class="nav-item">
                             <a class="nav-link " href="">
-                                <button class="btn btn-outline-light border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo1"><i class="fa-regular fa-envelope h4"></i>
-                                    <span class="badge rounded-pill bg-warning " style="margin-left: -10px">@{{ demThongBao }}</span>
+                                <button class="btn btn-outline-light border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo1"><i class="fa-regular fa-bell h5"></i>
+                                    <span class="badge rounded-pill bg-danger " style="margin-left: -10px">@{{ demThongBao }}</span>
                                 </button>
                             </a>
                         </li>

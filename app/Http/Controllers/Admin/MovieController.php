@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bill;
 use App\Models\Catelogue;
 use App\Models\Episode;
 use App\Models\Lists;
@@ -22,9 +23,12 @@ class MovieController extends Controller
     {
         $countPhimDangCapNhat = Movie::query()->where('trang_thai','Đang cập nhật')->count();
         $countPhimFull = Movie::query()->where('trang_thai','Full')->count();
+        $countPhimSapChieu = Movie::query()
+            ->where('list_id', '6')
+            ->count();
 
         $data = Movie::query()->with('lists')->orderByDesc('id')->get();
-        return view(self::PATH_VIEW.__FUNCTION__,compact('data','countPhimDangCapNhat','countPhimFull'));
+        return view(self::PATH_VIEW.__FUNCTION__,compact('data','countPhimDangCapNhat','countPhimFull','countPhimSapChieu'));
     }
 
     public function create()
@@ -206,6 +210,14 @@ class MovieController extends Controller
             DB::rollBack();
             return back()->withErrors(['error' => $exception->getMessage()]);
         }
+    }
+
+    public function thongKe()
+    {
+        $thongKe = Bill::query()->join('movies','bills.movie_id','movies.id')
+            ->select('movies.ten',DB::raw('sum(xu) as total'))->groupBy('movies.ten')->get()->toArray();
+//        dd($thongKe);
+        return  view(self::PATH_VIEW."thongke",compact('thongKe') );
     }
 
 

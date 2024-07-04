@@ -1,43 +1,43 @@
 @extends('admin.layouts.master')
 @section('title')
-    Danh sách thế loại
+    Danh sách thông báo đã gửi
 @endsection
 @section('content')
     <div class="d-flex justify-content-between mt-3 mb-3">
-        <h1 class="text-center h3">Danh sách thể loại</h1>
-        <div>
-            <a href="{{route('admin.catelogues.thongKe')}}" class="btn btn-info">Thống kê</a>
-            <a href="{{route('admin.catelogues.create')}}" class="btn btn-primary">Thêm mới</a>
-        </div>
+        <h1 class="text-center h3">Danh sách thông báo đã gửi</h1>
+        <a href="{{route('admin.thong-bao-admin.create')}}" class="btn btn-danger">Gửi thông báo đến nhóm tài khoản</a>
     </div>
-    @if(session('error'))
-            <li>{{session('error')}}</li>
-    @endif
     @if(session('success'))
         <li class="text-success">{{session('success')}}</li>
+    @endif
+    @if(session('error'))
+        <li class="text-danger">{{session('error')}}</li>
     @endif
     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Tên</th>
-            <th>Slug</th>
+            <th>Tên người dùng</th>
+            <th>Nội dung</th>
+            <th>Trạng thái</th>
+            <th>Thời gian gửi</th>
             <th>Thao tác</th>
         </tr>
         </thead>
 
         <tbody>
-        @foreach($data as $catelogue)
-            <tr>
-                <td>{{$catelogue->id}}</td>
-                <td>{{$catelogue->ten}}</td>
-                <td>{{$catelogue->slug}}</td>
+        @foreach($data as $item)
+            <tr >
+                <td>{{$item->id}}</td>
+                <td>{{$item->user->name}}</td>
+                <td>{{$item->noi_dung}}</td>
+                <td>{{$item->trang_thai}}</td>
+                <td>{{$item->created_at}}</td>
                 <td class="text-nowrap" style="width: 1px;">
-                    <a href="{{route('admin.catelogues.edit', $catelogue->id)}}" class="btn btn-outline-warning">Sửa</a>
-                    <form action="{{route('admin.catelogues.destroy', $catelogue->id)}}" method="POST">
+                    <form action="{{route('admin.comments.destroy',$item->id)}}" method="post">
                         @csrf
                         @method('DELETE')
-                        <button onclick="return confirm('xóa nhé')" class="btn btn-outline-danger" type="submit">Xóa</button>
+                        <button type="submit" class="btn btn-outline-danger">Xóa</button>
                     </form>
                 </td>
             </tr>
@@ -73,4 +73,3 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
     @endsection
 @endsection
-

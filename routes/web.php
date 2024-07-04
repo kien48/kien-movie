@@ -88,6 +88,7 @@ Route::prefix('api')->group(function (){
     Route::get('/dem-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDemThongBaoLoiChuaFix']);
     Route::get('/danh-sach-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDanhSachBaoLoi']);
     Route::get('/danh-sach-thong-bao', [\App\Http\Controllers\AdminNotificationController::class, 'apiHienThiThongBaoTheoUser']);
+    Route::get('/danh-sach-thong-bao-admin/{id}',[\App\Http\Controllers\Admin\Auth\MemberUserController::class,'apiHienDanhSachThongBao']);
 
 
 });
@@ -102,6 +103,7 @@ Route::post('/admin/login',[AdminUserController::class,'login'])->name('admin.lo
                Route::prefix('movies')
                    ->as('movies.')
                    ->group(function () {
+                       Route::get('thong-ke', [\App\Http\Controllers\Admin\MovieController::class, 'thongKe'])->name('thongKe');
                        Route::get('/', [\App\Http\Controllers\Admin\MovieController::class, 'index'])->name('index');
                        Route::get('create', [\App\Http\Controllers\Admin\MovieController::class, 'create'])->name('create');
                        Route::post('store', [\App\Http\Controllers\Admin\MovieController::class, 'store'])->name('store');
@@ -110,11 +112,12 @@ Route::post('/admin/login',[AdminUserController::class,'login'])->name('admin.lo
                        Route::put('{slug}/update', [\App\Http\Controllers\Admin\MovieController::class, 'update'])->name('update');
 
                    });
-
+               Route::get('catelogues/thong-ke',[\App\Http\Controllers\Admin\CatelogueController::class,'thongKe'])->name('catelogues.thongKe');
                Route::resource('catelogues', CatelogueController::class);
-               Route::get('/catelogue/thong-ke',[\App\Http\Controllers\Admin\CatelogueController::class,'thongKe'])->name('catelogue.thongKe');
-
                Route::resource('members', MemberUserController::class);
+               Route::get('thong-bao/{id}',[\App\Http\Controllers\Admin\Auth\MemberUserController::class,'thongBao'])->name('thongBao');
+               Route::post('gui-thong-bao',[\App\Http\Controllers\Admin\Auth\MemberUserController::class,'guiThongBao'])->name('guiThongBao');
+
                Route::resource('admins', AdminUserController::class);
                Route::resource('payments', PaymentController::class);
                Route::resource('bills', BillController::class);
@@ -128,6 +131,12 @@ Route::post('/admin/login',[AdminUserController::class,'login'])->name('admin.lo
                Route::get('mo-tai-khoan/{id}',[MemberUserController::class,'moKhoaTaiKhoan'])->name('mo-tai-khoan');
                Route::get('loi-chua-fix',[\App\Http\Controllers\Admin\NotificationController::class,'index'])->name('loi-chua-fix');
                Route::post('fix-loi',[\App\Http\Controllers\Admin\NotificationController::class,'store'])->name('fix-loi');
+
+               Route::resource('comments', App\Http\Controllers\Admin\CommentController ::class);
+               Route::get('thong-bao-admin/',[\App\Http\Controllers\Admin\AdminNotificationController::class,'index'])->name('thong-bao-admin');
+               Route::get('thong-bao-admin/create',[\App\Http\Controllers\Admin\AdminNotificationController::class,'create'])->name('thong-bao-admin.create');
+               Route::post('thong-bao-admin/store',[\App\Http\Controllers\Admin\AdminNotificationController::class,'store'])->name('thong-bao-admin.store');
+               Route::resource('settings', App\Http\Controllers\Admin\SettingController ::class);
 
            });
    });

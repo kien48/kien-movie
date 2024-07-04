@@ -20,4 +20,8 @@ class Comment extends Model
     {
         return $this->belongsTo(\App\Models\User::class);
     }
+    public function movie()
+    {
+        return $this->belongsTo(\App\Models\Movie::class);
+    }
 }

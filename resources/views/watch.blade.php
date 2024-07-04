@@ -184,7 +184,6 @@
                     })
                 }
                 $scope.getLuotXem();
-                setInterval($scope.getLuotXem, 10000)
                 $scope.themLuotXem = ()=>{
                     $http.post('{{route('themLuotXemPhim')}}',{
                         movie_id : {{$model['id']}},

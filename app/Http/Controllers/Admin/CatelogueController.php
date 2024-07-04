@@ -114,11 +114,10 @@ class CatelogueController extends Controller
     public function thongKe()
     {
         $genreCounts = DB::table('movie_catelogue')
-            ->select('movie_id','');
-
-        $labels = $genreCounts->pluck('genre')->toArray();
-        $data = $genreCounts->pluck('total')->toArray();
-        dd($labels, $data);
-        return view(self::PATH_VIEW."thongke", compact('labels', 'data'));
+            ->join('catelogues', 'movie_catelogue.catelogue_id', '=', 'catelogues.id')
+            ->select('catelogues.id', 'catelogues.ten', DB::raw('count(movie_catelogue.movie_id) as total'))
+            ->groupBy('catelogues.id', 'catelogues.ten')
+            ->get();
+        return view(self::PATH_VIEW."thongke",compact('genreCounts') );
     }
 }

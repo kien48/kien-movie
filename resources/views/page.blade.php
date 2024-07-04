@@ -127,18 +127,17 @@
 @endsection
 @section('content')
     <div class="container-fluid video-container">
-        <video src="{{ asset('/') }}/themes/web phim/public/img/video.mp4" autoplay muted></video>
+        <video src="{{\Storage::url($banner[0]->banner_video)}}" autoplay muted></video>
         <div class="content">
-            <h1>君の名は。</h1>
-            <p>Mitsuha Miyamizu, một nữ sinh trung học, khao khát được sống cuộc sống của một cậu bé ở thành phố Tokyo
-                nhộn nhịp...</p>
+            <h1>{{$banner[0]->tieu_de}}</h1>
+            <p>{{$banner[0]->noi_dung}}</p>
         </div>
     </div>
     <div class="container movie-section">
         <div class="row mb-5">
             <div class="col mb-1">
                 <div id="phimmoithem" class="d-flex justify-content-between" style="padding-top: 20px">
-                    <h2>Phim mới thêm</h2>
+                    <h1 class="text-warning" style="font-weight: 700">Phim mới thêm</h1>
                 </div>
                 <div class="row">
                     @foreach($dataPhimMoiThem as $data)
@@ -179,8 +178,8 @@
         </div>
         <div class="row mb-4">
             <div class="col mb-1">
-                <div id="tv" class="d-flex justify-content-between" style="padding-top: 72px">
-                    <h2>Phim hot nhất</h2>
+                <div id="" class="d-flex justify-content-between" style="padding-top: 72px">
+                    <h2 class="text-warning" style="font-weight: 700">Top 6 phim nhiều lượt thích nhất</h2>
                 </div>
                 <div class="row">
                     <div ng-repeat="data in phimHot" class="col-6 col-sm-4 col-md-3 col-lg-2 movie-card mb-3 mt-3">
@@ -211,7 +210,7 @@
         <div class="row mb-4">
             <div class="col mb-1">
                 <div id="phimle" class="d-flex justify-content-between" style="padding-top: 72px">
-                    <h2>Phim lẻ</h2>
+                    <h2 class="text-warning" style="font-weight: 700">Phim lẻ</h2>
                     <a href="{{route('lists',1)}}" class="nav-link"><h4>Xem thêm</h4></a>
                 </div>
                 <div class="row">
@@ -254,7 +253,7 @@
         <div class="row mb-4">
             <div class="col mb-1">
                 <div id="phimbo" class="d-flex justify-content-between " style="padding-top: 72px">
-                    <h2>Phim bộ</h2>
+                    <h2 class="text-warning" style="font-weight: 700">Phim bộ</h2>
                     <a href="{{route('lists',2)}}" class="nav-link"><h4>Xem thêm</h4></a>
                 </div>
                 <div class="row">
@@ -297,7 +296,7 @@
         <div class="row mb-4">
             <div class="col mb-1">
                 <div id="tv" class="d-flex justify-content-between" style="padding-top: 72px">
-                    <h2>TV Shows</h2>
+                    <h2 class="text-warning" style="font-weight: 700">TV Shows</h2>
                     <a href="{{route('lists',3)}}" class="nav-link"><h4>Xem thêm</h4></a>
                 </div>
                 <div class="row">
@@ -340,7 +339,7 @@
         <div class="row mb-4">
             <div class="col mb-1">
                 <div id="phimsapchieu" class="d-flex justify-content-between" style="padding-top: 72px">
-                    <h2>Phim sắp chiếu</h2>
+                    <h2 class="text-warning" style="font-weight: 700">Phim sắp chiếu</h2>
                     <a href="{{route('lists',6)}}" class="nav-link"><h4>Xem thêm</h4></a>
                 </div>
                 <div class="row">

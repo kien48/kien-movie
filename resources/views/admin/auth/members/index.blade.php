@@ -5,6 +5,18 @@
 @section('content')
     <div class="d-flex justify-content-between mt-3 mb-3">
         <h1 class="text-center h3">Danh sách tài khoản người dùng</h1>
+    <div style="height: 50px;width: 150px;border-radius: 10px;" class="bg-info">
+        Có tổng {{$demTong}} tài khoản
+    </div>
+    <div style="height: 50px;width: 150px;border-radius: 10px;" class="bg-warning">
+        Có {{$demVip}} tài khoản vip
+    </div>
+        <div style="height: 50px;width: 150px;border-radius: 10px;" class="bg-danger">
+            Có {{$demKhoa}} tài khoản bị khóa active
+        </div>
+        <div style="height: 50px;width: 150px;border-radius: 10px;" class="bg-secondary">
+            Có {{$demSpam}} tài khoản bị khóa spam
+        </div>
     </div>
     @if(session('error'))
         <li class="text-danger">{{session('error')}}</li>
@@ -35,10 +47,12 @@
                 $status = 'Không';
                 if($admin->is_active == 1){
                     $status = 'Đang bị khóa';
+                    $class = 'table-danger';
                 }
                 $spam = 'Không';
                 if($admin->is_spam == 1){
                     $spam = 'Có';
+                    $class = 'table-secondary';
                 }
             @endphp
             <tr class="{{$class}}">
@@ -50,6 +64,7 @@
                 <td>{{$spam}}</td>
                 <td>{{$status}}</td>
                 <td class="text-nowrap" style="width: 1px;">
+                    <a href="{{route('admin.thongBao',$admin->id)}}" class="btn btn-outline-dark">Thông báo</a>
                     <a href="{{route('admin.lich-xu-giao-dich',$admin->id)}}" class="btn btn-outline-info">Xem lịch sử giao dịch</a>
                     @if($admin->is_active==0)
                         <a href="{{route('admin.khoa-tai-khoan',$admin->id)}}" class="btn btn-outline-danger">Khóa</a>

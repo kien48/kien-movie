@@ -11,6 +11,10 @@
         <div style="height: 50px;width: 150px;background-color: #20c997;border-radius: 10px;">
             Có {{$countPhimFull}} phim đã full
         </div>
+        <div style="height: 50px;width: 150px;border-radius: 10px;" class=" bg-info">
+            Có {{$countPhimSapChieu}} phim sắp chiếu
+        </div>
+        <a href="{{route('admin.movies.thongKe')}}" class="btn btn-info">Thống kê</a>
         <a href="{{route('admin.movies.create')}}" class="btn btn-primary">Thêm mới</a>
     </div>
     @if(session('success'))

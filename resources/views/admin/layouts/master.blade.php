@@ -105,12 +105,21 @@
                     <li class="nav-item">
                         <a class="nav-link @if(Str::contains(Route::currentRouteName(), 'admin.bills')) active @endif" href="{{ route('admin.bills.index') }}">Hóa đơn mua phim</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(Str::contains(Route::currentRouteName(), 'admin.comments')) active @endif" href="{{ route('admin.comments.index') }}">Bình luận</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(Str::contains(Route::currentRouteName(), 'admin.thong-bao-admin')) active @endif" href="{{ route('admin.thong-bao-admin') }}">Gửi thông báo</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Tài khoản</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item @if(Str::contains(Route::currentRouteName(), 'admin.admins')) active @endif" href="{{ route('admin.admins.index') }}">Admin</a></li>
                             <li><a class="dropdown-item @if(Str::contains(Route::currentRouteName(), 'admin.members')) active @endif" href="{{ route('admin.members.index') }}">Member</a></li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(Str::contains(Route::currentRouteName(), 'admin.settings')) active @endif" href="{{ route('admin.settings.edit',1) }}">Cài đặt</a>
                     </li>
                 </ul>
             </div>

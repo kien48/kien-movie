@@ -69,6 +69,10 @@
                                 <h5 class="font-monospace text-light-emphasis">Lượt thích:</h5>
                                 <h5> @{{ countLike }} </h5>
                             </div>
+                                <div class="d-flex mt-3 ms-3 ">
+                                    <h5 class="font-monospace text-light-emphasis">Tổng lượt xem:</h5>
+                                    <h5> {{$tongLuotXem}} </h5>
+                                </div>
                         </div>
                         <div class="d-flex mt-2">
                             @if($is_vip == 0 && $model['is_vip'] == true)

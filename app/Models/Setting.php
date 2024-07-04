@@ -5,16 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class adminNotification extends Model
+class Setting extends Model
 {
     use HasFactory;
-    protected $fillable = [
-       'user_id',
-        'noi_dung',
-    ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $fillable = [
+      'banner_video',
+      'tieu_de',
+      'noi_dung'
+    ];
 }
