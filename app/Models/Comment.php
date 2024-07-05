@@ -24,4 +24,8 @@ class Comment extends Model
     {
         return $this->belongsTo(\App\Models\Movie::class);
     }
+    public function commentLike()
+    {
+        return $this->hasMany(CommentLike::class);
+    }
 }

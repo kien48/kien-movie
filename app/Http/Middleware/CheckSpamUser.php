@@ -29,7 +29,6 @@ class CheckSpamUser
             $tongTienTrongQuy = $tongQuy ? $tongQuy->tong_tien : 0;
 
             $userSpamCount = Notification::where('user_id', $user->id)->where('trang_thai', 'Spam')->count();
-
             if ($userSpamCount == 3) {
                 $adminNotificationCheck = AdminNotification::where('user_id', $user->id)
                     ->where('noi_dung', 'Tài khoản của bạn đã thực hiện 3 lần spam nếu thực hiện hơn sẽ bị khóa tài khoản hoặc bị trừ 5000 xu')
@@ -39,6 +38,7 @@ class CheckSpamUser
                     AdminNotification::create([
                         'user_id' => $user->id,
                         'noi_dung' => 'Tài khoản của bạn đã thực hiện 3 lần spam nếu thực hiện hơn sẽ bị khóa tài khoản hoặc bị trừ 5000 xu',
+                        'trang_thai' => 'Chưa đọc',
                     ]);
                 }
 
@@ -75,6 +75,9 @@ class CheckSpamUser
                             "mo_ta" => "Tiền phạt người dùng spam quá 3 lần",
                             "ngay_tao" => now()
                         ]);
+                        AdminNotification::query()->where('user_id', $user->id)
+                            ->where('noi_dung', 'Tài khoản của bạn đã thực hiện 3 lần spam nếu thực hiện hơn sẽ bị khóa tài khoản hoặc bị trừ 5000 xu')
+                            ->where('trang_thai', 'Chưa đọc')->delete();
 
                         Notification::where('user_id', $user->id)->where('trang_thai', 'Spam')->delete();
                         DB::commit();
@@ -85,6 +88,10 @@ class CheckSpamUser
                         return $next($request);
                     }
                 } elseif ($userCoin < 5000 && $userSpamCount > 3) {
+                    AdminNotification::query()->where('user_id', $user->id)
+                        ->where('noi_dung', 'Tài khoản của bạn đã thực hiện 3 lần spam nếu thực hiện hơn sẽ bị khóa tài khoản hoặc bị trừ 5000 xu')
+                        ->where('trang_thai', 'Chưa đọc')->delete();
+
                     User::where('id', $user->id)->update(['is_spam' => 1]);
                     Auth::logout();
                     return redirect()->route('login')->with('message', 'Bạn đã spam quá nhiều chúng tôi sẽ khóa tài khoản của bạn trong 6h');

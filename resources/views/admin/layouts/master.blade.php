@@ -128,6 +128,7 @@
         <div class="col-9 content" ng-controller="viewCtrl">
             <div>
                 <div>
+
                     @yield('content')
                 </div>
             </div>

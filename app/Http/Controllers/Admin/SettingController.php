@@ -46,7 +46,7 @@ class SettingController extends Controller
      */
     public function edit(SettingController $settingController)
     {
-        $data = Setting::query()->select(['banner_video','tieu_de','noi_dung','id'])->get();
+        $data = Setting::query()->get();
         return view('admin.setting',compact('data'));
     }
 
@@ -55,14 +55,20 @@ class SettingController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $model = Setting::query()->select(['banner_video','tieu_de','noi_dung'])->get();
-        $data = $request->except('banner_video','_token','_method');
+        $model = Setting::query()->get();
+        $data = $request->except('banner_video','banner_video_2','_token','_method');
         if($request->hasFile('banner_video')){
             $data['banner_video'] = Storage::put('settings', $request->file('banner_video'));
+        }
+        if($request->hasFile('banner_video_2')){
+            $data['banner_video_2'] = Storage::put('settings', $request->file('banner_video_2'));
         }
         $setting = Setting::query()->where('id',$id)->update($data);
         if( $request->hasFile('banner_video') && $model[0]->banner_video && Storage::exists($model[0]->banner_video)){
             Storage::delete($model[0]->banner_video);
+        }
+        if( $request->hasFile('banner_video_2') && $model[0]->banner_video_2 && Storage::exists($model[0]->banner_video_2)){
+            Storage::delete($model[0]->banner_video_2);
         }
         if ($setting) {
             return redirect()->back()->with('success', 'Cập nhật thành công');

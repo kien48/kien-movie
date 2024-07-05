@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bill;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
@@ -15,6 +17,17 @@ class CommentController extends Controller
     public function index()
     {
         $data = Comment::query()->with(['user','movie'])->orderByDesc('id')->get();
+        return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
+    }
+    public function thongKe()
+    {
+        $data = Comment::query()
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->join('movies', 'comments.movie_id', '=', 'movies.id')
+            ->select('users.id as user_id','users.name as user_name',
+                DB::raw('count(comments.content) as count'), DB::raw('AVG(comments.sao) as avg_sao'))
+            ->groupBy('users.id')->orderByDesc('count')
+            ->get();
         return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
     }
 

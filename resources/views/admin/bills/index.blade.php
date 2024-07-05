@@ -1,8 +1,27 @@
 @extends('admin.layouts.master')
-
+@section('title')
+    Hóa đơn mua phim
+@endsection
 @section('content')
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12 bg-light py-3">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0 text-dark">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);" class="nav-link">Hóa đơn mua phim</a></li>
+                        </ol>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
     <div class="d-flex justify-content-between mt-3 mb-3">
         <h1 class="text-center h3">Danh sách hóa đơn mua phim</h1>
+        <div>
+            <a href="{{route('admin.bills.thongKe')}}" class="btn btn-info">Thống kê</a>
+        </div>
     </div>
     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
         <thead>

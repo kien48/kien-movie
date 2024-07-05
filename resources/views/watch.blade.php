@@ -121,9 +121,31 @@
                             </div>
                         </div>
                         <div class="comment-text">@{{ data.content }}</div>
-                        <div class="comment-rating">
-                            Đánh giá sao: @{{ data.sao }}
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="comment-rating d-flex text-warning">
+                                    <i class="fa-solid fa-star" ng-show="data.sao >=1"></i>
+                                    <i class="fa-solid fa-star" ng-show="data.sao >=2"></i>
+                                    <i class="fa-solid fa-star" ng-show="data.sao >=3"></i>
+                                    <i class="fa-solid fa-star" ng-show="data.sao >=4"></i>
+                                    <i class="fa-solid fa-star" ng-show="data.sao >=5"></i>
+                                    <i class="fa-regular fa-star" ng-show="data.sao <=4"></i>
+                                    <i class="fa-regular fa-star" ng-show="data.sao <=3"></i>
+                                    <i class="fa-regular fa-star" ng-show="data.sao <=2"></i>
+                                    <i class="fa-regular fa-star" ng-show="data.sao <=1"></i>
+                                </div>
+                            </div>
+                            <div >
+                                <button ng-show="status == false" ng-click="likeComment(data.id)" class="btn btn-outline-danger border border-0">
+                                    <i class="fa-regular fa-thumbs-up"></i> @{{ data.comment_like.length }}
+                                </button>
+                                <button ng-show="status == true" ng-click="disLikeComment(data.id)" class="btn btn-outline-danger border border-0">
+                                    <i class="fa-solid fa-thumbs-up"></i> @{{ data.comment_like.length }}
+                                </button>
+                            </div>
+
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -142,6 +164,7 @@
         </div>
     </div>
     @section('js')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             viewFunction = function ($scope, $http) {
                 $scope.listComments = [];
@@ -150,13 +173,15 @@
                     $http.get('http://movie.test/api/comment/movie/{{ $model['id'] }}')
                         .then(function (response) {
                             $scope.listComments = response.data.data;
+                            angular.forEach($scope.listComments, function(comment) {
+                                $scope.checkLikeComment(comment.id);
+                            });
                         })
                         .catch(function (error) {
                             console.error(error);
                         });
                 }
                 $scope.getComment()
-                setInterval($scope.getComment, 1000)
                 $scope.send = () => {
                     $http.post('http://movie.test/api/comment',
                         {
@@ -207,15 +232,40 @@
                      tap : {{$episode['tap']}},
                      noi_dung : $scope.noi_dung
                  }).then(function (res){
-                     alert('Gửi thông báo lỗi thành công')
+                     Swal.fire({
+                         title: "Báo lỗi thành công!",
+                         text: "Cảm ơn bạn đã cho chúng tôi biết",
+                         icon: "success"
+                     });
                      document.querySelector('.btn-dong').click()
                      $scope.noi_dung= ''
                      $scope.hienNutBaoLoi = false;
                  })
              }
+                $scope.status = false;
+
+                $scope.likeComment = (id) => {
+                    $http.post("{{ route('like-comment.store') }}", {
+                        comment_id: id
+                    }).then(function(res) {
+                        $scope.getComment();
+                    });
+                };
+                $scope.disLikeComment = (id) => {
+                    $http.post("{{ route('disLikeComment') }}", {
+                        comment_id: id
+                    }).then(function(res) {
+                        $scope.getComment();
+                    });
+                };
+
+                $scope.checkLikeComment = (id) => {
+                    $http.get('http://movie.test/api/check-like-comment/' + id)
+                        .then(function(res) {
+                            $scope.status = res.data.status;
+                        });
+                };
             };
-
-
         </script>
     @endsection
 @endsection

@@ -69,6 +69,8 @@ Route::middleware(['auth','checkActiveMember','checkSpamMember','CongTienBaoLoi'
     Route::post('/cap-nhat-tai-khoan', [App\Http\Controllers\Auth\EditController::class, 'update'])->name('updatetk');
     Route::post('/bao-loi', [App\Http\Controllers\NotificationController::class, 'store'])->name('baoLoi');
     Route::post('/da-doc', [\App\Http\Controllers\AdminNotificationController::class, 'daDoc'])->name('daDoc');
+    Route::post('like-comment/dislike', [App\Http\Controllers\CommentLikeController::class,'disLike'])->name('disLikeComment');
+    Route::resource('like-comment', App\Http\Controllers\CommentLikeController::class);
 
 });
 
@@ -89,6 +91,7 @@ Route::prefix('api')->group(function (){
     Route::get('/danh-sach-thong-bao-loi', [\App\Http\Controllers\Admin\NotificationController::class, 'apiDanhSachBaoLoi']);
     Route::get('/danh-sach-thong-bao', [\App\Http\Controllers\AdminNotificationController::class, 'apiHienThiThongBaoTheoUser']);
     Route::get('/danh-sach-thong-bao-admin/{id}',[\App\Http\Controllers\Admin\Auth\MemberUserController::class,'apiHienDanhSachThongBao']);
+    Route::get('/check-like-comment/{id}',[\App\Http\Controllers\CommentLikeController::class,'apiUserCommentLike']);
 
 
 });
@@ -119,8 +122,13 @@ Route::post('/admin/login',[AdminUserController::class,'login'])->name('admin.lo
                Route::post('gui-thong-bao',[\App\Http\Controllers\Admin\Auth\MemberUserController::class,'guiThongBao'])->name('guiThongBao');
 
                Route::resource('admins', AdminUserController::class);
+
+               Route::get('payments/thong-ke',[\App\Http\Controllers\Admin\PaymentController::class,'thongKe'])->name('payments.thongKe');
                Route::resource('payments', PaymentController::class);
+
+               Route::get('bills/thong-ke',[\App\Http\Controllers\Admin\BillController::class,'thongKe'])->name('bills.thongKe');
                Route::resource('bills', BillController::class);
+
                Route::resource('catelogue-posts', CateloguePostController::class);
                Route::resource('posts', PostController ::class);
                Route::resource('tagposts', TagPostController ::class);
@@ -132,6 +140,7 @@ Route::post('/admin/login',[AdminUserController::class,'login'])->name('admin.lo
                Route::get('loi-chua-fix',[\App\Http\Controllers\Admin\NotificationController::class,'index'])->name('loi-chua-fix');
                Route::post('fix-loi',[\App\Http\Controllers\Admin\NotificationController::class,'store'])->name('fix-loi');
 
+               Route::get('comments/thong-ke',[\App\Http\Controllers\Admin\CommentController::class,'thongKe'])->name('comments.thongKe');
                Route::resource('comments', App\Http\Controllers\Admin\CommentController ::class);
                Route::get('thong-bao-admin/',[\App\Http\Controllers\Admin\AdminNotificationController::class,'index'])->name('thong-bao-admin');
                Route::get('thong-bao-admin/create',[\App\Http\Controllers\Admin\AdminNotificationController::class,'create'])->name('thong-bao-admin.create');

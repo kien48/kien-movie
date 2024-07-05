@@ -144,10 +144,13 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
+        <div ng-if="danhSachThongBao.length == 0" style="color: #fff;">Không có thông báo</div>
         <div ng-repeat="thongBao in danhSachThongBao" class="admin-message mb-3" style="background-color: #343a40; border-radius: 10px; padding: 15px;  align-items: center;">
             <p style="; color: #fff;">@{{ thongBao.noi_dung }}</p>
             <p style=" color: #fff;">@{{ thongBao.created_at | date:'HH:mm dd/MM/yyyy' }}</p>
-            <button ng-click="daDoc(thongBao.id)" class="btn btn-danger" style="margin-left: 10px;">Đã đọc</button>
+            <button ng-show="thongBao.noi_dung == 'Tài khoản của bạn đã thực hiện 3 lần spam nếu thực hiện hơn sẽ bị khóa tài khoản hoặc bị trừ 5000 xu'" class="btn btn-danger" style="margin-left: 10px;">Không thể xóa</button>
+            <button ng-show="thongBao.noi_dung != 'Tài khoản của bạn đã thực hiện 3 lần spam nếu thực hiện hơn sẽ bị khóa tài khoản hoặc bị trừ 5000 xu'" ng-click="daDoc(thongBao.id)" class="btn btn-danger" style="margin-left: 10px;">Đã đọc</button>
+
         </div>
 
     </div>

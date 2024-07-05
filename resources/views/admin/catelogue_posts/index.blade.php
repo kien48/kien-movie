@@ -3,6 +3,19 @@
     Danh sách danh mục bài viết
 @endsection
 @section('content')
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12 bg-light py-3">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0 text-dark">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);" class="nav-link">@yield('title')</a></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
     <div class="d-flex justify-content-between mt-3 mb-3">
         <h1 class="text-center h3">Danh sách danh mục bài viết</h1>
         <a href="{{route('admin.catelogue-posts.create')}}" class="btn btn-primary">Thêm mới</a>

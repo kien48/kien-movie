@@ -85,9 +85,9 @@
                             <tr>
                                 <td>{{$dem++}}</td>
                                 <td>{{ $item->user->name }}</td>
-                                <td>{{ $item->bien_dong_so_du }}</td>
-                                <td>{{ $item->truoc_giao_dich }}</td>
-                                <td>{{ $item->sau_giao_dich }}</td>
+                                <td>{{ $item->bien_dong_so_du }} xu</td>
+                                <td>{{ number_format($item->truoc_giao_dich) }} xu</td>
+                                <td>{{ number_format($item->sau_giao_dich) }} xu</td>
                                 <td>{{ $item->mo_ta }}</td>
                                 <td>{{ $item->created_at }}</td>
                             </tr>

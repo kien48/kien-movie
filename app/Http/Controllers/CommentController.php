@@ -16,13 +16,14 @@ class CommentController extends Controller
     public function index(string $id)
     {
 
-        $data = Comment::query()->with('user')->where('movie_id', $id)->latest('id')->get();
+        $data = Comment::query()->with(['user','commentLike'])->where('movie_id', $id)
+            ->latest('id')->get();
+
         $json = [
             'status' => true,
-            'msg'=>'thanh cong!',
-            'data' => $data
+            'msg' => 'thanh cong!',
+            'data' => $data,
         ];
-
         return response()->json($json,200);
     }
 

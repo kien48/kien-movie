@@ -45,7 +45,7 @@ class PageController extends Controller
             ->latest('id')
             ->take(12)
             ->get();
-        $banner = Setting::query()->select(['banner_video','tieu_de','noi_dung','id'])->get();
+        $banner = Setting::query()->get();
         return view('page', compact('dataPhimMoiThem', 'dataPhimLe', 'dataPhimBo', 'dataTvShows','dataPhimSapChieu','banner'));
     }
 
@@ -156,8 +156,8 @@ class PageController extends Controller
             ->firstOrFail();
 
         $episode = $model->episode()->where('tap', $tap)->firstOrFail()->toArray();
-
-        return view('watch', compact('model', 'episode'));
+        $userId = Auth::check() ? Auth::user()->id : 0;
+        return view('watch', compact('model', 'episode', 'userId'));
     }
 
     public function favourite()

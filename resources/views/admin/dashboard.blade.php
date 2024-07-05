@@ -89,6 +89,19 @@
     </style>
 @endsection
 @section('content')
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12 bg-light py-3">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0 text-dark">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);" class="nav-link">@yield('title')</a></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
     <div class="container dashboard-container">
         <div class="row slide-in-elliptic-top-fwd">
             <div class="col-2 bg-danger d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
@@ -112,8 +125,11 @@
             <div class="col-2 bg-dark  d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
                 <h3 class="text-center">Tổng danh thu: {{number_format($tongDanhThu)}}đ</h3>
             </div>
-            <div class="col-2 bg-light text-dark  d-flex justify-content-center align-items-center dashboard-card" style="height: 200px">
-                <h3 class="text-center">Tổng quỹ: {{number_format($tongQuy->tong_tien)}}đ</h3>
+            <div class="col-2 bg-light text-dark  d-flex justify-content-center align-items-center dashboard-card" data-bs-toggle="modal" data-bs-target="#myModal" style="height: 200px">
+                <h3 class="text-center" >Tổng quỹ: {{number_format($tongQuy->tong_tien)}}đ
+                <p>(click và để xem chi tiết)</p>
+                </h3>
+
             </div>
         </div>
 
@@ -147,8 +163,77 @@
             </div>
         </div>
     </div>
-    @section('js')
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark">
 
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Lịch sử giao dịch quỹ</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                        <table id="example" class="w-100 table table-bordered table-hover history-table mt-4">
+                            <thead>
+                            <tr>
+                                <th>Số thứ tự</th>
+                                <th>Người dùng</th>
+                                <th>Biến động số dư</th>
+                                <th>Trước giao dịch</th>
+                                <th>Sau giao dịch</th>
+                                <th>Mô tả</th>
+                                <th>Thời gian</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @php $dem = 1 @endphp
+                            @foreach($lichSuGiaoDich as $item)
+                                <tr>
+                                    <td>{{$dem++}}</td>
+                                    <td>{{ $item->user->name }}</td>
+                                    <td>{{ $item->bien_dong_so_du }}</td>
+                                    <td>{{ $item->truoc_giao_dich }}</td>
+                                    <td>{{ $item->sau_giao_dich }}</td>
+                                    <td>{{ $item->mo_ta }}</td>
+                                    <td>{{ $item->created_at }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @section('js')
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <!--datatable js-->
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('#example').DataTable({
+                    responsive: true,
+                    order: [[1, 'desc']]
+                });
+            });
+        </script>
     @endsection
 @endsection
 

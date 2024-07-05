@@ -224,48 +224,59 @@
     </div>
     {{--Modal mua phim--}}
     <!-- The Modal -->
-    <div class="modal text-danger fade" id="myModalMuaPhim" tabindex="-1" aria-labelledby="myModalMuaPhimLabel"
-         aria-hidden="true">
+    <div class="modal fade" id="myModalMuaPhim" tabindex="-1" aria-labelledby="myModalMuaPhimLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-warning">
-                    <h3 class="modal-title text-white" id="myModalMuaPhimLabel">Mua phim</h3>
-                    <button type="button" id="close" class="btn-close btn-close-white btn-dong-phim" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                <div class="modal-header bg-dark border-bottom-0">
+                    <h3 class="modal-title text-white" id="myModalMuaPhimLabel">Mua Phim</h3>
+                    <button type="button" class="btn-close btn-dong-phim btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body text-center p-5 text-dark">
                     @if(isset($dataUser['coin'][0]['coin']) && $dataUser['coin'][0]['coin'] >= $model['gia'])
                         <form action="" method="post">
                             @csrf
-                            <h5 class="mb-3">Số xu còn
-                                lại: {{ isset($dataUser['coin'][0]['coin']) ? number_format($dataUser['coin'][0]['coin']) : 0 }}
-                                xu</h5>
-                            <h5 class="mb-3">Giá phim: {{ number_format($model['gia']) }} xu</h5>
-                            <hr>
-                            <h5 class="mb-3">Tổng xu còn
-                                lại: {{ isset($dataUser['coin'][0]['coin']) ? number_format($dataUser['coin'][0]['coin'] - $model['gia']) : 0 }}
-                                xu</h5>
-                        <h5>*20% xu sẽ được trích vào quỹ</h5>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" ng-click="muaPhim()" class="btn btn-primary">Xác nhận mua phim</button>
-                    </form>
+                            <div class="mb-4">
+                                <h5 class="mb-3">Số xu còn lại:</h5>
+                                <p class="h4 text-success">{{ number_format($dataUser['coin'][0]['coin']) }} xu</p>
+                            </div>
+                            <div class="mb-4">
+                                <h5 class="mb-3">Giá phim:</h5>
+                                <p class="h4 text-warning">{{ number_format($model['gia']) }} xu</p>
+                            </div>
+                            <hr class="my-4">
+                            <div class="mb-4">
+                                <h5 class="mb-3">Tổng xu còn lại:</h5>
+                                <p class="h4 text-primary">{{ number_format($dataUser['coin'][0]['coin'] - $model['gia']) }} xu</p>
+                            </div>
+                            <p class="text-muted">*20% xu sẽ được trích vào quỹ</p>
+                            <div class="modal-footer border-top-0 mt-4">
+                                <button type="button" ng-click="muaPhim()" class="btn btn-primary btn-lg w-100">Xác Nhận Mua Phim</button>
+                            </div>
+                        </form>
+                    @elseif(Auth::check())
+                        <div class="mb-4">
+                            <h3 class="text-danger">Đăng nhập để mua phim</h3>
+                        </div>
                     @else
-                        <h3>Không đủ tiền để mua phim này</h3>
+                        <div class="mb-4">
+                            <h3 class="text-danger">Không đủ tiền để mua phim này</h3>
+                        </div>
                     @endif
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-secondary btn-lg w-100" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <audio id="likeSound" src="{{asset('/')}}/themes/web phim/public/img/click.mp3" preload="auto"></audio>
     <audio id="loveSound" src="{{asset('/')}}/themes/web phim/public/img/love.mp3" preload="auto"></audio>
     <audio id="coinSound" src="{{asset('/')}}/themes/web phim/public/img/coin.mp3" preload="auto"></audio>
 
     @section('js')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             viewFunction = ($scope, $http) => {
                 $scope.out = ''
@@ -359,6 +370,11 @@
                         coin: {{$model['gia']}}
                     }).then(function (res) {
                         $scope.ttMuaPhim();
+                        Swal.fire({
+                            title: "Hoàn tất!",
+                            text: "Cảm ơn bạn đã mua phim!",
+                            icon: "success"
+                        });
                         document.querySelector('.btn-dong-phim').click()
                         playCoinSound()
                     })
