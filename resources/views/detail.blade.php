@@ -253,7 +253,7 @@
                                 <button type="button" ng-click="muaPhim()" class="btn btn-primary btn-lg w-100">Xác Nhận Mua Phim</button>
                             </div>
                         </form>
-                    @elseif(Auth::check())
+                    @elseif(!Auth::check())
                         <div class="mb-4">
                             <h3 class="text-danger">Đăng nhập để mua phim</h3>
                         </div>
@@ -361,9 +361,6 @@
                 };
 
                 $scope.countLikeMovie();
-                setInterval($scope.countLikeMovie, 1000);
-
-
                 $scope.muaPhim = () => {
                     $http.post('{{ route('muaPhim') }}', {
                         movie_id: {{$model['id']}},
@@ -376,6 +373,7 @@
                             icon: "success"
                         });
                         document.querySelector('.btn-dong-phim').click()
+                        $scope.getThongBao()
                         playCoinSound()
                     })
                 }

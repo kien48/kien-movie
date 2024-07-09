@@ -220,5 +220,4 @@ class MovieController extends Controller
         return  view(self::PATH_VIEW."thongke",compact('thongKe') );
     }
 
-
 }

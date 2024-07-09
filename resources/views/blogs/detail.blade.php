@@ -45,6 +45,7 @@
                        id : {{$model['id']}}
                    }).then(function (res){
                        $scope.loadLuotXem()
+                       $scope.loadLuotXem()
                    }).catch(function (error){
                        console.log(error)
                    })
@@ -60,7 +61,6 @@
                     })
                 }
                 $scope.loadLuotXem()
-                setInterval($scope.loadLuotXem,5000)
                 var demNguoc = setInterval(function() {
                     setThoiGian--;
                     if (setThoiGian <= 0) {

@@ -18,7 +18,10 @@
     <!-- end page title -->
     <div class="container">
         <h1>Danh Sách Thông Báo Lỗi Phim Chưa Fix</h1>
-        <table class="table">
+        <div  ng-show="danhSach.length == 0">
+            Chưa có thông báo nào
+        </div>
+        <table class="table" ng-show="danhSach.length > 0">
             <thead>
             <tr>
                 <th>ID</th>
@@ -103,14 +106,13 @@
                 };
 
                 $scope.getDanhSach();
-                setInterval($scope.getDanhSach, 2000)
-
                 $scope.capNhat = () => {
                     $http.post('{{route('admin.fix-loi')}}',{
                         id : $scope.selectedLoi.id,
                         trang_thai : $scope.selectedLoi.trang_thai
                     }).then(function (res){
                         alert('cập nhật thành công')
+                        $scope.getDanhSach();
                         document.querySelector('.btn-close').click()
                     })
                 }

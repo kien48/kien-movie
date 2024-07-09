@@ -1,3 +1,18 @@
+<?php
+
+use App\Models\CateloguePost;
+use App\Models\Post;
+use App\Models\TagPost;
+
+$postHot = Post::query()->where('catelogue_post_id', '!=', 3)
+    ->orderByDesc('luot_xem')
+    ->limit(4)->get();
+
+$tags = TagPost::query()->get();
+
+$danhMuc = CateloguePost::query()->where('id', '!=', 3)->get();
+?>
+
 @extends('layouts.master')
 @section('title')
     Tin tức
@@ -9,6 +24,7 @@
             background-color: #f4f4f9;
             color: #333;
         }
+
         /* Header styles */
         .headered {
             text-align: center;
@@ -190,7 +206,8 @@
                 <h3>Tags</h3>
                 <div class="tags">
                     @foreach($tags as $item)
-                        <a href="{{route('tagBaiViet',[$item->id,$item->slug])}}">{{$item->ten}}</a> @endforeach
+                        <a href="{{route('tagBaiViet',[$item->id,$item->slug])}}">{{$item->ten}}</a>
+                    @endforeach
                 </div>
             </div>
         @endif

@@ -79,7 +79,7 @@
                                 <label class="form-check-label">Phim vip</label>
                             </div>
                         </div>
-                        <div class="col-3 mb-3">
+                        <div class="col-2 mb-3">
                             <button type="button" class="btn btn-danger btn-lg w-100" ng-click="reset()">Đặt lại
                             </button>
                         </div>
@@ -123,7 +123,10 @@
                 $scope.selectedCatalogue = "";
                 $scope.selectedList = "";
                 $scope.selectedYear = "";
-
+                $scope.selectedPrice = "";
+                $scope.is_vip = false;
+                $scope.selectedQuocGia = ""
+                $scope.selectedNgonNgu = ""
                 $http.get('api/movie')
                     .then(function (res) {
                         $scope.listMovie = res.data.data;
@@ -164,6 +167,10 @@
                     $scope.selectedList = "";
                     $scope.selectedYear = "";
                     $scope.filteredMovies = $scope.listMovie;
+                    $scope.selectedPrice = "";
+                    $scope.is_vip = false;
+                    $scope.selectedQuocGia = ""
+                    $scope.selectedNgonNgu = ""
                 }
 
             }
